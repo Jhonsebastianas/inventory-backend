@@ -1,0 +1,27 @@
+version: '1'
+services:
+  mongodb:
+    image: mongo:3.5
+    hostname: localhost
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=alice
+      - MONGO_INITDB_ROOT_PASSWORD=super-secret-password
+    restart: on-failure
+    ports:
+      - 27017:27017
+  nestjs-app:
+    build: .
+    container_name: nestjs-app
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm run start:dev
+    environment:
+      - DATABASE_HOST=mongodb
+      - DATABASE_USER=alice
+      - DATABASE_PASSWORD=super-secret-password
+    depends_on:
+      - mongodb
+    ports:
+      - 3000:3000
