@@ -32,7 +32,7 @@ export class LoginController {
             httpOnly: true, // La cookie no es accesible mediante JavaScript en el cliente
             sameSite: 'strict', // La cookie se envía solo para peticiones del mismo sitio
             secure: process.env.NODE_ENV === 'production', // En producción, envía la cookie solo sobre HTTPS
-            // maxAge: 3600000 // Tiempo de expiración de la cookie en milisegundos
+            maxAge: 3600000 // Tiempo de expiración de la cookie en milisegundos
         });
         response.send(simpleLoginOut);
         return simpleLoginOut;

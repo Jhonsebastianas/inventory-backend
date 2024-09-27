@@ -15,8 +15,8 @@ async function bootstrap() {
   app.useGlobalFilters(new ManagerExceptionFilter());
   // Swagger
   const config = new DocumentBuilder()
-    .setTitle('Finances Backend')
-    .setDescription('Finances API description')
+    .setTitle('Inventory Backend')
+    .setDescription('Inventory API description')
     .setVersion('1.0')
     .build();
   const options: SwaggerDocumentOptions = {

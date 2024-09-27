@@ -12,7 +12,8 @@ const providers = [
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://jhonsebastianas:DaqZa5pWuVRFTQms@cluster0finances.ujei8ik.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0Finances'),
+    MongooseModule.forRoot('mongodb+srv://inventorybackend:oTy7FGJgr38fLQJJ@cluster0.i504v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0Finances'),
+    
     UserModule,
     LoginModule,
     FinancialRegisterModule,
