@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 @Schema({ collection: "products" })
 export class Product {
@@ -11,7 +11,7 @@ export class Product {
     @Prop({ required: false })
     description: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, type: Number })
     price: number;
 
     @Prop({ required: true, default: false, })
