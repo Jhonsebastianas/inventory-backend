@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 
-@Schema({ collection: "products" })
+@Schema({ collection: "products", timestamps: true })
 export class Product {
     _id: Types.ObjectId;
 
