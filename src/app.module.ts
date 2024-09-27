@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './plugins/user/user.module';
 import { LoginModule } from '@login/login.module';
 import { FinancialRegisterModule } from '@financial-register/financial-register.module';
+import { ProductsModule } from './plugins/products/products.module';
 
 const providers = [
   AppService,
@@ -16,6 +17,7 @@ const providers = [
     
     UserModule,
     LoginModule,
+    ProductsModule,
     FinancialRegisterModule,
   ],
   controllers: [AppController],
