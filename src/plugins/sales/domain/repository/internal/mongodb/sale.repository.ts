@@ -1,4 +1,5 @@
 import { Sale } from "../../../model/document/sale.document";
+import { SaleDTO } from "../../../model/dto/sale.dto";
 
 /**
  * Interface encargada de definir los métodos para la capa de datos de la entidad. <br>
@@ -44,5 +45,10 @@ export interface SaleMongoRepository {
      * @return
     */
     findById(id: string): Promise<Sale>;
+
+    /**
+     * Encuentra todas las ventas registradas en el sistema.
+     */
+    findAll(): Promise<Sale[]>;
 
 }

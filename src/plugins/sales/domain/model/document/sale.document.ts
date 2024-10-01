@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 import { SaleProduct, SaleProductSchema } from "./sale-product.document";
 import { SalePaymentMethodDTO } from "../dto/sale-payment-method.dto";
+import { FzUtil } from "@core/util/fz-util";
 
 @Schema({ collection: "sales", timestamps: true })
 export class Sale {
@@ -24,6 +25,9 @@ export class Sale {
 
     @Prop({ required: true, name: "total_products" })
     totalProducts: number;
+
+    @Prop({ required: true, name: "created_at", default: FzUtil.getCurrentDate() })
+    createdAt: Date;
 
     @Prop({ type: Types.ObjectId, ref: 'File', required: false, name: 'proof_payment' }) // Referencia al archivo
     proofPayment: Types.ObjectId;

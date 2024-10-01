@@ -1,6 +1,7 @@
 import { IsString, IsNumber } from 'class-validator';
 
 export class SaleProductDTO {
+  
   @IsString()
   id: string;
 

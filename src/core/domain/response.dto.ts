@@ -6,10 +6,10 @@ export class ResponseDTO {
     @ApiProperty({ description: 'Código de estado', example: 200 })
     statusCode: number;
 
-    @ApiProperty({ description: 'Mensaje de la respuesta', example: 'Todo OK.' })
+    @ApiProperty({ description: 'Mensaje de la respuesta', example: 'Resultado éxitoso' })
     message: string;
 
-    @ApiProperty({ description: 'Información adicional en la respuesta', example: 'UserObject' })
+    @ApiProperty({ description: 'Información adicional en la respuesta', example: 'data' })
     data: any;
 
     /**

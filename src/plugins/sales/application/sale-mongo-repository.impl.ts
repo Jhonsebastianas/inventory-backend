@@ -3,6 +3,7 @@ import { SaleMongoRepository } from "../domain/repository/internal/mongodb/sale.
 import { Sale } from "../domain/model/document/sale.document";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
+import { SaleDTO } from "../domain/model/dto/sale.dto";
 
 @Injectable()
 export class SaleRepositoryImpl implements SaleMongoRepository {
@@ -24,6 +25,10 @@ export class SaleRepositoryImpl implements SaleMongoRepository {
 
     async findById(id: string): Promise<Sale> {
         return await this.saleModel.findById(id).exec();
+    }
+
+    async findAll(): Promise<Sale[]> {
+        return await this.saleModel.find();
     }
 
 }
