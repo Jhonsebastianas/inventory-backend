@@ -2,7 +2,6 @@ import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class FileDTO {
     
-  @IsString()
   id: string;
 
   @IsString()
@@ -17,7 +16,6 @@ export class FileDTO {
   @IsString()
   data: string;
 
-  @IsOptional()
   @IsString()
   extension?: string;
 }

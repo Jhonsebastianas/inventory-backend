@@ -40,7 +40,7 @@ export class SaleController {
         description: 'Venta creada con exito',
         type: ResponseDTO,
     })
-    async registerProduct(@Body() saleToRegister: CreateSaleDTO): Promise<ResponseDTO> {
+    async registerSale(@Body() saleToRegister: CreateSaleDTO): Promise<ResponseDTO> {
         return await this.saleService.registerSale(saleToRegister);
     }
 
