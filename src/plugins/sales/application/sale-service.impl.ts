@@ -10,6 +10,7 @@ import { UserSessionServiceImpl } from "@login/application/user-session-service.
 import { Types } from "mongoose";
 import { CreateSaleDTO } from "../domain/model/dto/create-sale.dto";
 import { SaleProductMapper } from "../domain/repository/internal/mapper/sale-product.mapper";
+import { ProductServiceImpl } from "src/plugins/products/application/product-service.impl";
 
 
 @Injectable()
@@ -18,6 +19,7 @@ export class SaleServiceImpl implements SaleService {
     constructor(
         private saleMongoRepository: SaleRepositoryImpl,
         private userSessionServiceImpl: UserSessionServiceImpl,
+        private productService: ProductServiceImpl,
     ) { }
 
     async registerSale(saleToRegister: CreateSaleDTO): Promise<ResponseDTO> {
@@ -33,6 +35,11 @@ export class SaleServiceImpl implements SaleService {
         newSale.products = saleToRegister.products.flatMap(product => SaleProductMapper.mapToSaleProduct(product));
         newSale.totalInvoiced = saleToRegister.products.reduce((total, precio) => total += precio.price * precio.quantity, 0);
         newSale.totalProducts = saleToRegister.products.map(product => product.quantity).reduce((total, cantidad) => total += cantidad, 0);
+
+        for (const product of saleToRegister.products) {
+            this.productService.updateStock(product.id, FzUtil.getNegative(product.quantity));
+        }
+
         // REGISTRO DE FACTURA
         //newSale.proofPayment
 

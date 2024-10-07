@@ -40,7 +40,7 @@ export class ProductServiceImpl implements ProductService {
             throw new ConflictException("El producto no se encuentra registrado en el sistema");
         }
 
-        await this.productMongoRepository.update(ProductMapper.mapToUser(productUpdate));
+        await this.productMongoRepository.update(ProductMapper.mapToProduct(productUpdate));
 
         return new ResponseDtoBuilder().ok()
             .whitMessage("Producto registrado con éxito")
@@ -54,20 +54,29 @@ export class ProductServiceImpl implements ProductService {
 
     async findAll(): Promise<ProductDTO[]> {
         return (await this.productMongoRepository.findAll())
-            .flatMap(product => ProductMapper.mapToUserDTO(product));
+            .flatMap(product => ProductMapper.mapToProductDTO(product));
     }
 
     async findById(id: string): Promise<ProductDTO> {
-        return ProductMapper.mapToUserDTO(await this.productMongoRepository.findById(id));
+        return ProductMapper.mapToProductDTO(await this.productMongoRepository.findById(id));
     }
 
     async findByName(name: string): Promise<ProductDTO> {
-        return ProductMapper.mapToUserDTO(await this.productMongoRepository.findByName(name));
+        return ProductMapper.mapToProductDTO(await this.productMongoRepository.findByName(name));
     }
 
     async findByLikeName(name: string): Promise<ProductDTO[]> {
         return (await this.productMongoRepository.findByLikeName(name))
-            .flatMap(product => ProductMapper.mapToUserDTO(product));
+            .flatMap(product => ProductMapper.mapToProductDTO(product));
+    }
+
+    async updateStock(idProduct: string, quantity: number): Promise<void> {
+        const product: ProductDTO = await this.findById(idProduct);
+        if (quantity < 0) {
+            // alert of low stocks
+        }
+        product.stock = product.stock + quantity;
+        this.updateProduct(idProduct, product);
     }
 
 }

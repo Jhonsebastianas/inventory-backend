@@ -28,4 +28,8 @@ export class FzUtil {
     static getYearOfDate(date: Date) {
         return dayjs(date).year();
     }
+
+    static getNegative(number: number): number {
+        return (number <= 0) ? number : number * -1;
+    }
 }

@@ -4,7 +4,7 @@ import { ProductDTO } from "../../../model/dto/product.dto";
 
 export class ProductMapper {
 
-    static mapToUserDTO(product: Product): ProductDTO {
+    static mapToProductDTO(product: Product): ProductDTO {
         const productDTO = new ProductDTO();
         productDTO.id = product._id.toString();
         productDTO.name = product.name;
@@ -14,7 +14,7 @@ export class ProductMapper {
         return productDTO;
     }
 
-    static mapToUser(productDTO: ProductDTO): Product {
+    static mapToProduct(productDTO: ProductDTO): Product {
         const product = new Product();
         product._id = new Types.ObjectId(productDTO.id);
         product.name = productDTO.name;
