@@ -75,8 +75,12 @@ export class ProductServiceImpl implements ProductService {
         if (quantity < 0) {
             // alert of low stocks
         }
-        product.stock = product.stock + quantity;
-        this.updateProduct(idProduct, product);
+        const newStock = product.stock + quantity;
+        if (newStock < 0) {
+            product.stock = 0;
+        }
+        product.stock = (newStock > 0) ? product.stock + quantity : 0;
+        await this.updateProduct(idProduct, product);
     }
 
 }
