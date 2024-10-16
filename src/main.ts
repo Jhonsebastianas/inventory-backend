@@ -5,6 +5,20 @@ import { ManagerExceptionFilter } from '@core/exceptions/manager-exception.filte
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 
+import * as tsConfigPaths from 'tsconfig-paths';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Leer el archivo tsconfig.json
+const tsConfigPath = path.resolve(__dirname, '../tsconfig.json');
+const tsConfig = JSON.parse(fs.readFileSync(tsConfigPath, 'utf-8'));
+
+// Registrar los paths de tsconfig
+tsConfigPaths.register({
+  baseUrl: tsConfig.compilerOptions.outDir || './dist', // Ruta de salida de los archivos transpilados
+  paths: tsConfig.compilerOptions.paths // Aliases definidos en tsconfig
+});
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Config
