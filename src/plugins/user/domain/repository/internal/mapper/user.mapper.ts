@@ -23,11 +23,11 @@ export class UserMapper {
             return null;
         }
         const user = new User();
-        user._id = new Types.ObjectId(userDTO._id);
-        user.active = userDTO.active;
-        user.names = userDTO.names;
-        user.password = userDTO.password;
-        user.username = userDTO.username;
+        user._id = new Types.ObjectId(userDTO?._id);
+        user.active = userDTO?.active;
+        user.names = userDTO?.names;
+        user.password = userDTO?.password;
+        user.username = userDTO?.username;
         return user;
     }
 
