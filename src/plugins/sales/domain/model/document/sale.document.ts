@@ -11,8 +11,8 @@ export class Sale {
     @Prop({ type: Types.ObjectId, ref: 'User', required: true, name: 'id_user' })
     idUser: Types.ObjectId;
 
-    @Prop({ required: false, name: "invoice_identifier" })
-    invoiceIdentifier: string;
+    @Prop({ required: false, type: String, name: "invoice_identifier", default: FzUtil.genUUID()})
+    invoiceIdentifier: string
 
     @Prop({ required: true, type: [ SaleProductSchema ] })
     products: SaleProduct[];

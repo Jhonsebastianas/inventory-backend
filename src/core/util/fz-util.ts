@@ -1,4 +1,5 @@
 import * as dayjs from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
 
 export class FzUtil {
     static toTitleCase(value: string): string {
@@ -31,5 +32,9 @@ export class FzUtil {
 
     static getNegative(number: number): number {
         return (number <= 0) ? number : number * -1;
+    }
+
+    static genUUID() {
+        return uuidv4()
     }
 }
