@@ -30,7 +30,6 @@ export class SaleServiceImpl implements SaleService {
         const newSale = new Sale();
         newSale.createdAt = FzUtil.getCurrentDate();
         newSale.idUser = new Types.ObjectId(await this.userSessionServiceImpl.getIdUser());
-        newSale.invoiceIdentifier = "00000001"; // Realizar ajuste con consecutivos
         newSale.paymentMethods = saleToRegister.paymentMethods;
         newSale.products = saleToRegister.products.flatMap(product => SaleProductMapper.mapToSaleProduct(product));
         newSale.totalInvoiced = saleToRegister.products.reduce((total, precio) => total += precio.price * precio.quantity, 0);
