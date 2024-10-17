@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
+import { productConstants } from "../../constants";
 
 @Schema({ collection: "products", timestamps: true })
 export class Product {
@@ -16,6 +17,9 @@ export class Product {
 
     @Prop({ required: true, default: false, })
     stock: number;
+
+    @Prop({ required: false, type: Number })
+    percentageTax: number;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

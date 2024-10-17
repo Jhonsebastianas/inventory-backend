@@ -14,6 +14,7 @@ export class ProductMapper {
         productDTO.description = product?.description;
         productDTO.price = product?.price;
         productDTO.stock = product?.stock;
+        productDTO.percentageTax = product?.percentageTax;
         return productDTO;
     }
 
@@ -27,6 +28,7 @@ export class ProductMapper {
         product.description = productDTO?.description;
         product.price = productDTO?.price;
         product.stock = productDTO?.stock;
+        product.percentageTax = productDTO?.percentageTax;
         return product;
     }
 

@@ -28,6 +28,7 @@ export class ProductServiceImpl implements ProductService {
         newProduct.name = productRegister.name;
         newProduct.price = productRegister.price;
         newProduct.stock = productRegister.stock;
+        newProduct.percentageTax = productRegister.percentageTax;
 
         await this.productMongoRepository.save(newProduct);
         return new ResponseDtoBuilder().ok().whitMessage("Producto registrado con éxito").build();

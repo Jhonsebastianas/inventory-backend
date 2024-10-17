@@ -4,4 +4,5 @@ export class ProductDTO {
     description: string;
     price: number;
     stock: number;
+    percentageTax: number;
 }

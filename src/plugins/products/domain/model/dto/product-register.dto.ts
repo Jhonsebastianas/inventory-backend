@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 import { Transform } from "class-transformer";
 import { FzUtil } from "@core/util/fz-util";
 import { ApiProperty } from "@nestjs/swagger";
@@ -21,5 +21,9 @@ export class ProductRegisterDTO {
     @IsNotEmpty({ message: 'El campo en inventario es obligatorio' })
     @ApiProperty({ description: 'Cantidad de producto en inventario', example: '10' })
     stock: number;
+
+    @IsOptional()
+    @ApiProperty({ description: 'Iva, impuesto', example: '19' })
+    percentageTax: number;
     
 }
