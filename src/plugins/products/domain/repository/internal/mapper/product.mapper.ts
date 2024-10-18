@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { Product } from "../../../model/document/product.document";
 import { ProductDTO } from "../../../model/dto/product.dto";
+import { StockDetailMapper } from "./stock-detail.mapper";
 
 export class ProductMapper {
 
@@ -14,7 +15,10 @@ export class ProductMapper {
         productDTO.description = product?.description;
         productDTO.price = product?.price;
         productDTO.stock = product?.stock;
+        productDTO.stockDetails = product?.stockDetails.flatMap(detail => StockDetailMapper.mapToStockDetailDTO(detail));
         productDTO.percentageTax = product?.percentageTax;
+        productDTO.quantityStockReplenished = product?.quantityStockReplenished;
+        productDTO.weightedPurchasePrice = product?.weightedPurchasePrice;
         return productDTO;
     }
 
@@ -28,7 +32,10 @@ export class ProductMapper {
         product.description = productDTO?.description;
         product.price = productDTO?.price;
         product.stock = productDTO?.stock;
+        product.stockDetails = productDTO?.stockDetails.flatMap(detail => StockDetailMapper.mapToStockDetail(detail));
         product.percentageTax = productDTO?.percentageTax;
+        product.quantityStockReplenished = productDTO?.quantityStockReplenished;
+        product.weightedPurchasePrice = productDTO?.weightedPurchasePrice;
         return product;
     }
 

@@ -36,7 +36,7 @@ export class SaleServiceImpl implements SaleService {
         newSale.totalProducts = saleToRegister.products.map(product => product.quantity).reduce((total, cantidad) => total += cantidad, 0);
 
         for (const product of saleToRegister.products) {
-            this.productService.updateStock(product.id, FzUtil.getNegative(product.quantity));
+            await this.productService.reduceInventories(product.id, product.quantity);
         }
 
         // REGISTRO DE FACTURA

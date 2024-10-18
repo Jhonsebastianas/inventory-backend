@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ProductRepositoryImpl } from "./product-mongo-repository.impl";
 import { ProductService } from "../domain/service/product.service";
 import { ResponseDTO, ResponseDtoBuilder } from "@core/domain/response.dto";
@@ -7,10 +7,13 @@ import { ProductDTO } from "../domain/model/dto/product.dto";
 import { ProductMapper } from "../domain/repository/internal/mapper/product.mapper";
 import { Product } from "../domain/model/document/product.document";
 import { ConflictException } from "@core/exceptions/manager.exception";
+import { StockDetailMapper } from "../domain/repository/internal/mapper/stock-detail.mapper";
 
 
 @Injectable()
 export class ProductServiceImpl implements ProductService {
+
+    private readonly logger = new Logger(ProductServiceImpl.name, { timestamp: true });
 
     constructor(
         private productMongoRepository: ProductRepositoryImpl,
@@ -24,11 +27,13 @@ export class ProductServiceImpl implements ProductService {
         }
 
         const newProduct = new Product();
-        newProduct.description = productRegister.description;
-        newProduct.name = productRegister.name;
-        newProduct.price = productRegister.price;
-        newProduct.stock = productRegister.stock;
-        newProduct.percentageTax = productRegister.percentageTax;
+        newProduct.description = productRegister?.description;
+        newProduct.name = productRegister?.name;
+        newProduct.price = productRegister?.price;
+        newProduct.stock = productRegister?.stockDetails.reduce((total, detail) => total += detail.quantity, 0);
+        newProduct.percentageTax = productRegister?.percentageTax;
+        newProduct.stockDetails = productRegister?.stockDetails.map(detail => StockDetailMapper.mapToStockDetail(detail));
+        newProduct.quantityStockReplenished = product?.quantityStockReplenished;
 
         await this.productMongoRepository.save(newProduct);
         return new ResponseDtoBuilder().ok().whitMessage("Producto registrado con éxito").build();
@@ -71,17 +76,45 @@ export class ProductServiceImpl implements ProductService {
             .flatMap(product => ProductMapper.mapToProductDTO(product));
     }
 
-    async updateStock(idProduct: string, quantity: number): Promise<void> {
+    async reduceInventories(idProduct: string, quantity: number): Promise<void> {
         const product: ProductDTO = await this.findById(idProduct);
-        if (quantity < 0) {
-            // alert of low stocks
+    
+        let remainingQuantity = quantity; // Cantidad a reducir en stockDetails
+        let updatedStock = 0; // Nuevo stock total después de la reducción
+    
+        // Recorremos los detalles de inventario (stockDetails) para ir reduciendo las existencias
+        for (const stockDetail of product.stockDetails) {
+            if (remainingQuantity <= 0) break; // Si ya hemos reducido toda la cantidad, salimos del bucle
+    
+            const availableQuantity = stockDetail.quantity;
+    
+            if (availableQuantity >= remainingQuantity) {
+                // Si la cantidad disponible es suficiente para cubrir lo que queda por reducir
+                stockDetail.quantity -= remainingQuantity;
+                updatedStock += stockDetail.quantity; // Sumamos al stock total
+                remainingQuantity = 0; // Todo se ha reducido
+            } else {
+                // Si la cantidad disponible no es suficiente
+                remainingQuantity -= availableQuantity; // Restamos lo que queda disponible
+                stockDetail.quantity = 0; // Este detalle de inventario queda en 0
+            }
+    
+            // Sumamos la cantidad restante al stock total
+            updatedStock += stockDetail.quantity;
         }
-        const newStock = product.stock + quantity;
-        if (newStock < 0) {
-            product.stock = 0;
+    
+        const newStock = product.stock - quantity;
+        product.stock = (newStock > 0) ? newStock : 0;
+    
+        // Verificamos si el inventario está por debajo del nivel de reorden
+        if (product.stock <= product.quantityStockReplenished) {
+            this.logger.log("Inventario próximo a reordenar");
+            console.log("Inventario próximo a reordenar");
+            // Aquí podrías implementar alguna lógica adicional, como notificaciones
         }
-        product.stock = (newStock > 0) ? product.stock + quantity : 0;
+    
+        // Finalmente, actualizamos el producto
         await this.updateProduct(idProduct, product);
-    }
+    }    
 
 }

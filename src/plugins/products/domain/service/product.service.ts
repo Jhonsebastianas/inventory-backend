@@ -59,12 +59,12 @@ export interface ProductService {
     findByLikeName(name: string): Promise<ProductDTO[]>;
 
     /**
-     * Update stock's product
+     * Reduce stock's product
      * Created on 07/10/2024 at 06:29 p.m. <br>
      * 
      * @param id product identity
      * @param quantity quantity to add or less
      */
-    updateStock(idProduct: string, quantity: number): Promise<void>;
+    reduceInventories(idProduct: string, quantity: number): Promise<void>;
     
 }
