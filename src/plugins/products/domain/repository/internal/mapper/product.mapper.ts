@@ -11,6 +11,7 @@ export class ProductMapper {
         }
         const productDTO = new ProductDTO();
         productDTO.id = product._id?.toString();
+        productDTO.businessId = product?.businessId?.toString();
         productDTO.name = product?.name;
         productDTO.description = product?.description;
         productDTO.price = product?.price;
@@ -28,6 +29,7 @@ export class ProductMapper {
         }
         const product = new Product();
         product._id = new Types.ObjectId(productDTO?.id);
+        product.businessId = new Types.ObjectId(productDTO?.businessId);
         product.name = productDTO?.name;
         product.description = productDTO?.description;
         product.price = productDTO?.price;

@@ -6,6 +6,9 @@ import { StockDetail, StockDetailSchema } from "./stock-detail.document";
 export class Product {
     _id: Types.ObjectId;
 
+    @Prop({ required: true, type: Types.ObjectId, ref: 'business', name: "_id" })
+    businessId: Types.ObjectId;
+
     @Prop({ required: true })
     name: string;
 

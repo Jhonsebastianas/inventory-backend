@@ -1,8 +1,8 @@
-import { StockDetail } from "../document/stock-detail.document";
 import { StockDetailDTO } from "./stock-detail.dto";
 
 export class ProductDTO {
     id: string;
+    businessId: string;
     name: string;
     description: string;
     price: number;

@@ -8,6 +8,8 @@ import { ProductMapper } from "../domain/repository/internal/mapper/product.mapp
 import { Product } from "../domain/model/document/product.document";
 import { ConflictException } from "@core/exceptions/manager.exception";
 import { StockDetailMapper } from "../domain/repository/internal/mapper/stock-detail.mapper";
+import { BusinessServiceImpl } from "src/plugins/business/application/business-service.impl";
+import { Types } from "mongoose";
 
 
 @Injectable()
@@ -17,6 +19,7 @@ export class ProductServiceImpl implements ProductService {
 
     constructor(
         private productMongoRepository: ProductRepositoryImpl,
+        private businessService: BusinessServiceImpl,
     ) { }
 
     async registerProduct(productRegister: ProductRegisterDTO): Promise<ResponseDTO> {
@@ -26,7 +29,10 @@ export class ProductServiceImpl implements ProductService {
             throw new ConflictException("El producto ya se encuentra registrado en el sistema");
         }
 
+        const business = await this.businessService.getBusinessWorkingOn();
+
         const newProduct = new Product();
+        newProduct.businessId = new Types.ObjectId(business?.id);
         newProduct.description = productRegister?.description;
         newProduct.name = productRegister?.name;
         newProduct.price = productRegister?.price;
