@@ -10,5 +10,5 @@ export class ProductDTO {
     stockDetails: StockDetailDTO[];
     percentageTax: number;
     quantityStockReplenished: number;
-    weightedPurchasePrice: number;
+    weightedAveragePurchasePrice: number;
 }

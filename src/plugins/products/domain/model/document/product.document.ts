@@ -15,9 +15,6 @@ export class Product {
     @Prop({ required: true, type: Number })
     price: number; // selling price
 
-    @Prop({ required: false, type: Number })
-    weightedPurchasePrice: number; // Precio de compra ponderado
-
     @Prop({ required: true, default: false, })
     stock: number;
 
@@ -29,6 +26,9 @@ export class Product {
 
     @Prop({ required: false, type: Number })
     percentageTax: number;
+
+    @Prop({ required: false, type: Number })
+    weightedAveragePurchasePrice: number; // Precio de compra ponderado
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

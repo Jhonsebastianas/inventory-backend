@@ -8,7 +8,5 @@ export interface TokenService {
     verify(token: any): any;
 
     getUserByToken(token: string): UserTokenDTO;
-
-    getUserByContext(context: ExecutionContext): UserTokenDTO;
     
 }

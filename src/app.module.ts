@@ -8,6 +8,7 @@ import { FinancialRegisterModule } from '@financial-register/financial-register.
 import { ProductsModule } from './plugins/products/products.module';
 import { SalesModule } from './plugins/sales/sales.module';
 import { FileSystemModule } from './plugins/file-system/file-system.module';
+import { BusinessModule } from './plugins/business/business.module';
 
 const providers = [
   AppService,
@@ -19,6 +20,7 @@ const providers = [
     
     FileSystemModule,
     UserModule,
+    BusinessModule,
     LoginModule,
     ProductsModule,
     SalesModule,

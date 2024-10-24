@@ -1,5 +1,4 @@
 import { cookieConstants } from '@login/domain/constants';
-import { UserTokenDTO } from '@login/domain/model/dto/user-token.dto';
 import { Injectable, Scope, Inject } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
@@ -17,5 +16,10 @@ export class TokenContext {
             return authHeader.split(' ')[1];  // Retorna el token sin el "Bearer "
         }
         return null;
+    }
+
+    get currentBusiness(): string {
+        const businessHeader = this.request.header['currentBusiness'];
+        return businessHeader ?? null;
     }
 }

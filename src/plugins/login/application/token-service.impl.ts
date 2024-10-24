@@ -27,8 +27,4 @@ export class TokenServiceImpl implements TokenService {
         return this.verify(token);
     }
 
-    getUserByContext(context: ExecutionContext): UserTokenDTO {
-        throw new Error("Method not implemented.");
-    }
-
 }
