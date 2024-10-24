@@ -6,6 +6,7 @@ import { SaleServiceImpl } from "./application/sale-service.impl";
 import { SaleController } from "./infrastructure/sale.controller";
 import { LoginModule } from "@login/login.module";
 import { ProductsModule } from "../products/products.module";
+import { BusinessModule } from "../business/business.module";
 
 const documents = [
     { name: Sale.name, schema: SaleSchema },
@@ -27,6 +28,7 @@ const controllers = [
     imports: [
         MongooseModule.forFeature(documents),
         LoginModule,
+        BusinessModule,
         ProductsModule,
     ],
     controllers,

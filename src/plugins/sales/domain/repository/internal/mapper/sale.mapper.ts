@@ -8,6 +8,7 @@ export class SaleMapper {
         const saleDTO = new SaleDTO();
         saleDTO.id = sale._id?.toString();
         saleDTO.idUser = sale.idUser?.toString();
+        saleDTO.businessId = sale.businessId?.toString();
         saleDTO.createdAt = sale.createdAt;
         saleDTO.invoiceIdentifier = sale.invoiceIdentifier;
         saleDTO.paymentMethods = sale.paymentMethods;
@@ -22,6 +23,7 @@ export class SaleMapper {
         const sale = new Sale();
         sale._id = new Types.ObjectId(saleDTO?.id);
         sale.idUser = new Types.ObjectId(saleDTO?.idUser);
+        sale.businessId = new Types.ObjectId(saleDTO?.businessId)
         sale.createdAt = saleDTO.createdAt;
         sale.invoiceIdentifier = saleDTO.invoiceIdentifier;
         sale.paymentMethods = saleDTO.paymentMethods;

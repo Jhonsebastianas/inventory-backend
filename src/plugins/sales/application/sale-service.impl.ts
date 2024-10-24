@@ -11,6 +11,7 @@ import { Types } from "mongoose";
 import { CreateSaleDTO } from "../domain/model/dto/create-sale.dto";
 import { SaleProductMapper } from "../domain/repository/internal/mapper/sale-product.mapper";
 import { ProductServiceImpl } from "src/plugins/products/application/product-service.impl";
+import { BusinessServiceImpl } from "src/plugins/business/application/business-service.impl";
 
 
 @Injectable()
@@ -20,6 +21,7 @@ export class SaleServiceImpl implements SaleService {
         private saleMongoRepository: SaleRepositoryImpl,
         private userSessionServiceImpl: UserSessionServiceImpl,
         private productService: ProductServiceImpl,
+        private businessService: BusinessServiceImpl,
     ) { }
 
     async registerSale(saleToRegister: CreateSaleDTO): Promise<ResponseDTO> {
@@ -27,9 +29,12 @@ export class SaleServiceImpl implements SaleService {
         //     return new ResponseDtoBuilder().ok().whitMessage("La venta ya se encuentra registrada").build();
         // }
 
+        const currentBusiness = await this.businessService.getBusinessWorkingOn();
+
         const newSale = new Sale();
         newSale.createdAt = FzUtil.getCurrentDate();
         newSale.idUser = new Types.ObjectId(await this.userSessionServiceImpl.getIdUser());
+        newSale.businessId = new Types.ObjectId(currentBusiness.id);
         newSale.paymentMethods = saleToRegister.paymentMethods;
         newSale.products = saleToRegister.products.flatMap(product => SaleProductMapper.mapToSaleProduct(product));
         newSale.totalInvoiced = saleToRegister.products.reduce((total, precio) => total += precio.price * precio.quantity, 0);

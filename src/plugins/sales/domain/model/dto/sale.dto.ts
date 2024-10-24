@@ -5,13 +5,10 @@ import { SalePaymentMethodDTO } from "./sale-payment-method.dto";
 export class SaleDTO {
     id: string;
     idUser: string;
+    businessId: string;
     invoiceIdentifier: string;
     createdAt: Date;
-
-    
     products: SaleProduct[];
-
-    @ApiProperty({ description: 'Productos vendidos', example: [new SaleProduct()] })
     paymentMethods: SalePaymentMethodDTO[];
     totalInvoiced: number;
     totalProducts: number;

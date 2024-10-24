@@ -35,7 +35,7 @@ export class FzUtil {
     }
 
     static genUUID() {
-        return uuidv4()
+        return uuidv4();
     }
 
     static printMemoryUsage() {
