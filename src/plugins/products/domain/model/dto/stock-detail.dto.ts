@@ -3,6 +3,7 @@ export class StockDetailDTO {
     provider: string;
     purchasePrice: number;
     totalGrossProfit: number;
+    totalPurchasePrice: number;
     quantity: number;
     quantityPurchased: number;
 }

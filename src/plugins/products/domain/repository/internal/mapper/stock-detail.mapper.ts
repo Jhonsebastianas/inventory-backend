@@ -13,6 +13,7 @@ export class StockDetailMapper {
         stockDetailDTO.provider = stockDetail?.provider;
         stockDetailDTO.purchasePrice = stockDetail?.purchasePrice;
         stockDetailDTO.totalGrossProfit = stockDetail?.totalGrossProfit;
+        stockDetailDTO.totalPurchasePrice = stockDetail?.totalPurchasePrice;
         stockDetailDTO.quantity = stockDetail?.quantity;
         stockDetailDTO.quantityPurchased = stockDetail?.quantityPurchased;
         return stockDetailDTO;
@@ -30,6 +31,7 @@ export class StockDetailMapper {
         stockDetail.provider = stockDetailDTO?.provider;
         stockDetail.purchasePrice = stockDetailDTO?.purchasePrice;
         stockDetail.totalGrossProfit = stockDetailDTO?.totalGrossProfit;
+        stockDetail.totalPurchasePrice = stockDetailDTO?.totalPurchasePrice;
         stockDetail.quantity = stockDetailDTO?.quantity;
         stockDetail.quantityPurchased = stockDetailDTO?.quantityPurchased;
         return stockDetail;

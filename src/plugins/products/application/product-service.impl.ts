@@ -38,13 +38,21 @@ export class ProductServiceImpl implements ProductService {
         newProduct.price = productRegister?.price;
         newProduct.stock = productRegister?.stockDetails.reduce((total, detail) => total += detail.quantity, 0);
         newProduct.percentageTax = productRegister?.percentageTax;
+
+        let sumTotalPurchasePrices = 0;
+
         newProduct.stockDetails = productRegister?.stockDetails.map(detail => { 
+            const totalPurchasePrice = detail.purchasePrice * detail.quantity;
+            sumTotalPurchasePrices = sumTotalPurchasePrices + totalPurchasePrice;
             return {...StockDetailMapper.mapToStockDetail(detail),
                 quantityPurchased: detail.quantity,
+                totalPurchasePrice,
                 totalGrossProfit: 0.0,
             } 
         });
+
         newProduct.quantityStockReplenished = product?.quantityStockReplenished;
+        newProduct.weightedAveragePurchasePrice = sumTotalPurchasePrices / newProduct.stock;
 
         await this.productMongoRepository.save(newProduct);
         return new ResponseDtoBuilder().ok().whitMessage("Producto registrado con éxito").build();
