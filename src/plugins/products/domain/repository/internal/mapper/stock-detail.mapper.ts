@@ -12,7 +12,9 @@ export class StockDetailMapper {
         stockDetailDTO.id = stockDetail?._id.toString();
         stockDetailDTO.provider = stockDetail?.provider;
         stockDetailDTO.purchasePrice = stockDetail?.purchasePrice;
+        stockDetailDTO.totalGrossProfit = stockDetail?.totalGrossProfit;
         stockDetailDTO.quantity = stockDetail?.quantity;
+        stockDetailDTO.quantityPurchased = stockDetail?.quantityPurchased;
         return stockDetailDTO;
     }
 
@@ -27,7 +29,9 @@ export class StockDetailMapper {
             : new Types.ObjectId();  // Generar nuevo ObjectId
         stockDetail.provider = stockDetailDTO?.provider;
         stockDetail.purchasePrice = stockDetailDTO?.purchasePrice;
+        stockDetail.totalGrossProfit = stockDetailDTO?.totalGrossProfit;
         stockDetail.quantity = stockDetailDTO?.quantity;
+        stockDetail.quantityPurchased = stockDetailDTO?.quantityPurchased;
         return stockDetail;
     }
 

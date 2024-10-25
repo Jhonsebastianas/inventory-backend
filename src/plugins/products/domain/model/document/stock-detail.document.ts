@@ -11,8 +11,14 @@ export class StockDetail {
     @Prop({ required: true, type: Number })
     purchasePrice: number;
 
-    @Prop({ required: true, default: false, })
+    @Prop({ required: true, type: Number, default: 0.0 })
+    totalGrossProfit: number; // Beneficio bruto
+
+    @Prop({ required: true, default: 0, })
     quantity: number;
+
+    @Prop({ required: true, default: 0, })
+    quantityPurchased: number;
 
 }
 

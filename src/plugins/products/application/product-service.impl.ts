@@ -38,7 +38,12 @@ export class ProductServiceImpl implements ProductService {
         newProduct.price = productRegister?.price;
         newProduct.stock = productRegister?.stockDetails.reduce((total, detail) => total += detail.quantity, 0);
         newProduct.percentageTax = productRegister?.percentageTax;
-        newProduct.stockDetails = productRegister?.stockDetails.map(detail => StockDetailMapper.mapToStockDetail(detail));
+        newProduct.stockDetails = productRegister?.stockDetails.map(detail => { 
+            return {...StockDetailMapper.mapToStockDetail(detail),
+                quantityPurchased: detail.quantity,
+                totalGrossProfit: 0.0,
+            } 
+        });
         newProduct.quantityStockReplenished = product?.quantityStockReplenished;
 
         await this.productMongoRepository.save(newProduct);
@@ -98,11 +103,18 @@ export class ProductServiceImpl implements ProductService {
                 // Si la cantidad disponible es suficiente para cubrir lo que queda por reducir
                 stockDetail.quantity -= remainingQuantity;
                 updatedStock += stockDetail.quantity; // Sumamos al stock total
+
+                const profit = product.price - stockDetail.purchasePrice;
+                stockDetail.totalGrossProfit = stockDetail.totalGrossProfit + (remainingQuantity * profit);
                 remainingQuantity = 0; // Todo se ha reducido
+                
             } else {
                 // Si la cantidad disponible no es suficiente
                 remainingQuantity -= availableQuantity; // Restamos lo que queda disponible
                 stockDetail.quantity = 0; // Este detalle de inventario queda en 0
+
+                const profit = product.price - stockDetail.purchasePrice;
+                stockDetail.totalGrossProfit = stockDetail.totalGrossProfit + (availableQuantity * profit);
             }
     
             // Sumamos la cantidad restante al stock total

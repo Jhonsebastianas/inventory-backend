@@ -48,7 +48,6 @@ export class BusinessServiceImpl implements BusinessService {
     async getBusinessWorkingOn(): Promise<BusinessDTO> {
         const user: UserTokenDTO = this.tokenService.getUserByToken();
         const business = await this.findBusinessByOwnerId(user.id);
-        console.log(business)
         if (business == null) {
             const employeBusinesses = await this.businessRepository.findByEmployeeId(user.id);
             return BusinessMapper.mapToBusinessDTO(employeBusinesses);
