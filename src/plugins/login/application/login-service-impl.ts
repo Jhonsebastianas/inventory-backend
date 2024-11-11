@@ -13,6 +13,9 @@ import { ResponseDTO, ResponseDtoBuilder } from "@core/domain/response.dto";
 import { OtpCodeServiceImpl } from "./otp-code-service.impl";
 import { RecoverAccountInDTO } from "@login/domain/model/dto/recover-account-in.dto";
 import { RecoverAccountOutDTO } from "@login/domain/model/dto/recover-account-out.dto";
+import { EmailServiceImpl } from "src/plugins/notification/application/email-service.impl";
+import { SendEmailDTO, SendEmailDTOBuilder } from "src/plugins/notification/domain/model/dto/send-email.dto";
+import { EmailParametersBuilder } from "src/plugins/notification/domain/model/dto/email-parameters.dto";
 
 @Injectable()
 export class LoginServiceImpl implements LoginService {
@@ -21,6 +24,7 @@ export class LoginServiceImpl implements LoginService {
         private userService: UserServiceImpl,
         private otpCodeService: OtpCodeServiceImpl,
         private tokenService: TokenServiceImpl,
+        private emailService: EmailServiceImpl,
     ) { }
 
     async simpleLogin(simpleLogin: SimpleLoginInDTO): Promise<SimpleLoginOutDTO> {
@@ -57,11 +61,23 @@ export class LoginServiceImpl implements LoginService {
             throw new UnauthorizedException("Correo electrónico incorrecto.");
         }
         const otpCode = await this.otpCodeService.generateOtp(user._id);
-        // send email
+
+        const sendEmailDTO: SendEmailDTO = new SendEmailDTOBuilder()
+            .withRecipientEmails([recoverAccountInfo.email])
+            .withParameters(new EmailParametersBuilder()
+                .withEmail(recoverAccountInfo.email)
+                .withUserNames(user.names)
+                .withOtpCode(otpCode.code)
+                .build()
+            )
+            .build();
+        await this.emailService.sendRecoverAccountMail(sendEmailDTO);
+
         const tokenUser = this.tokenService.create(user._id);
         const outInfo = new RecoverAccountOutDTO();
         outInfo.token = tokenUser;
         outInfo.email = recoverAccountInfo.email;
+
         return new ResponseDtoBuilder()
             .ok()
             .whitData(outInfo)

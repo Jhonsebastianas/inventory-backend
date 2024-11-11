@@ -3,6 +3,7 @@ import { EmailParameters } from "./email-parameters.dto";
 export class SendEmailDTO {
     parameters: EmailParameters;
     recipientEmails: string[];
+    pathTemplate: string;
 }
 
 
@@ -13,6 +14,7 @@ export class SendEmailDTOBuilder {
         this._sendEmailDto = {
             parameters: new EmailParameters(),
             recipientEmails: [],
+            pathTemplate: "",
         };
     }
 
@@ -24,5 +26,14 @@ export class SendEmailDTOBuilder {
     withRecipientEmails(recipientEmails: string[]): SendEmailDTOBuilder {
         this._sendEmailDto.recipientEmails = recipientEmails;
         return this;
+    }
+
+    withPathTemplate(pathTemplate: string): SendEmailDTOBuilder {
+        this._sendEmailDto.pathTemplate = pathTemplate;
+        return this;
+    }
+
+    build(): SendEmailDTO {
+        return this._sendEmailDto;
     }
 }

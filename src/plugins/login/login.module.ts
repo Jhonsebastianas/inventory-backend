@@ -11,6 +11,7 @@ import { OtpCode, OtpCodeSchema } from "./domain/model/document/otp-code.documen
 import { MongooseModule } from "@nestjs/mongoose";
 import { OtpCodeRepositoryImpl } from "./application/otp-code-mongo-repository.impl";
 import { OtpCodeServiceImpl } from "./application/otp-code-service.impl";
+import { NotificationModule } from "../notification/notification.module";
 
 const documents = [
     { name: OtpCode.name, schema: OtpCodeSchema },
@@ -18,6 +19,7 @@ const documents = [
 
 const dependencies = [
     UserModule,
+    NotificationModule,
     JwtModule.register({
         global: true,
         secret: jwtConstants.secret,
