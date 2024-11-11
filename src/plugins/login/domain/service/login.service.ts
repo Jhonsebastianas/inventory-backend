@@ -1,16 +1,10 @@
 import { ResponseRedirectDTO } from "@core/domain/response-redirect.dto";
+import { ResponseDTO } from "@core/domain/response.dto";
 import { SimpleLoginInDTO } from "@login/domain/model/dto/simple-login-in.dto";
 import { SimpleLoginOutDTO } from "@login/domain/model/dto/simple-login-out.dto";
+import { RecoverAccountInDTO } from "../model/dto/recover-account-in.dto";
 
 export interface LoginService {
-
-    /**
-     * Method in charge of activating the account through JWT.
-     * Created on 22/04/2024 at 06:36:10. <br>
-     * 
-     * @param { string } token JWT token containing user information.
-     */
-    activateJWTaccount(token: string): Promise<ResponseRedirectDTO>;
 
     /**
      * Method in charge of logging into the application.
@@ -20,23 +14,14 @@ export interface LoginService {
      */
     simpleLogin(simpleLogin: SimpleLoginInDTO): Promise<SimpleLoginOutDTO>;
 
-    /**
-     * Method for recovering a user's account by token.
-     * Created on 22/04/2024 at 06:41:00. <br>
-     * 
-     * @param { string } oken JWT token containing user information.
-     */
-    retrieveJWTaccount(token: string): Promise<ResponseRedirectDTO>;
-
-    /**
-     * Method for account recovery via SMS message.
-     * Created on 22/04/2024 at 06:45:49. <br>
-     * 
-     * @param smsCode SMS code sent by the user
-     */
-    retrieveAccountBySMS(smsCode: string): Promise<any>;
-    // https://www.npmjs.com/package/@prymejo/nestjs-sms-and-email-module
-
 
     // https://docs.nestjs.com/security/authentication
+
+    /**
+     * Send verification code to recover account.
+     * Created on date 11/11/2024 at 16:17:22. <br>
+     * 
+     * @param { RecoverAccountInDTO } recoverAccountInfo email of user to recover account
+     */
+    sendVerificationCodeRecoverAccount(recoverAccountInfo: RecoverAccountInDTO): Promise<ResponseDTO>;
 }

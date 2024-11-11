@@ -30,4 +30,8 @@ export class OtpCodeRepositoryImpl implements OtpCodeRepository {
         return await this.otpCodeModel.findOne({ code, userId });
     }
 
+    async findByUserId(userId: string): Promise<OtpCode> {
+        return await this.otpCodeModel.findOne({ userId });
+    }
+
 }

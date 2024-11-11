@@ -55,4 +55,12 @@ export interface OtpCodeRepository {
      */
     findByCodeAndUserId(code: string, userId: string): Promise<OtpCode>;
 
+    /**
+     * Find otp code by userId
+     * Created on date 11/11/2024 at 16:46:52. <br>
+     * 
+     * @param userId identifier of user
+     */
+    findByUserId(userId: string): Promise<OtpCode>;
+
 }

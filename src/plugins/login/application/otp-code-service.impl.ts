@@ -12,6 +12,10 @@ export class OtpCodeServiceImpl implements OtpCodeService {
     ) { }
 
     async generateOtp(userId: string): Promise<OtpCode> {
+        const existOtpCode = await this.otpCodeRepository.findByUserId(userId);
+        if (existOtpCode != null) {
+            await this.otpCodeRepository.delete(existOtpCode._id.toString());
+        }
         const otp = this.generateOTP().toString();
         const newOtp = new OtpCode();
         newOtp.code = otp;

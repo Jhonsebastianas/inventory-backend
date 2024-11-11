@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 @Schema({ collection: "otp_code" })
-export class OtpCode extends Document {
+export class OtpCode {
 
     _id: Types.ObjectId;
 

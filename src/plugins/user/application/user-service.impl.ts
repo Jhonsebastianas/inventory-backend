@@ -46,13 +46,8 @@ export class UserServiceImpl implements UserService {
         return UserMapper.mapToUserDTO(await this.userMongoRepository.findByUsername(username));
     }
 
-    async verifyExistingUserRecoverAccount(email: string): Promise<ResponseDTO> {
-        const user: User = await this.userMongoRepository.findByEmail(email);
-        if (user == null) {
-            throw new ConflictException("El usuario no está actualmente conectado al sistema, contactar con el administrador");
-        }
-        // send OTP
-        throw new Error("Method not implemented.");
+    async findByEmail(email: string): Promise<UserDTO> {
+        return UserMapper.mapToUserDTO(await this.userMongoRepository.findByEmail(email));
     }
 
 }

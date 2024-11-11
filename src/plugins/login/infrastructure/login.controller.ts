@@ -1,6 +1,8 @@
+import { ResponseDTO } from "@core/domain/response.dto";
 import { LoginServiceImpl } from "@login/application/login-service-impl";
 import { UserSessionServiceImpl } from "@login/application/user-session-service.impl";
 import { cookieConstants } from "@login/domain/constants";
+import { RecoverAccountInDTO } from "@login/domain/model/dto/recover-account-in.dto";
 import { SimpleLoginInDTO } from "@login/domain/model/dto/simple-login-in.dto";
 import { SimpleLoginOutDTO } from "@login/domain/model/dto/simple-login-out.dto";
 import { Body, Controller, Get, Post, Res, UsePipes, ValidationPipe } from "@nestjs/common";
@@ -48,6 +50,13 @@ export class LoginController {
     })
     async getInfoUser(): Promise<UserDTO> {
         return await this.userSession.getInfoUser();
+    }
+
+    @Post('sendVerificationCodeRecoverAccount')
+    @ApiOperation({ description: 'send verification code recover account' })
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async generateOtp(@Body() recover: RecoverAccountInDTO): Promise<ResponseDTO> {
+        return await this.loginService.sendVerificationCodeRecoverAccount(recover);
     }
 
 }

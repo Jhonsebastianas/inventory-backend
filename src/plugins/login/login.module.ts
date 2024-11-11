@@ -9,6 +9,8 @@ import { jwtConstants } from "./domain/constants";
 import { UserSessionServiceImpl } from "./application/user-session-service.impl";
 import { OtpCode, OtpCodeSchema } from "./domain/model/document/otp-code.document";
 import { MongooseModule } from "@nestjs/mongoose";
+import { OtpCodeRepositoryImpl } from "./application/otp-code-mongo-repository.impl";
+import { OtpCodeServiceImpl } from "./application/otp-code-service.impl";
 
 const documents = [
     { name: OtpCode.name, schema: OtpCodeSchema },
@@ -24,7 +26,9 @@ const dependencies = [
     MongooseModule.forFeature(documents),
 ];
 
-const repositories = [];
+const repositories = [
+    OtpCodeRepositoryImpl,
+];
 
 const services = [
     // JwtService,
@@ -32,6 +36,7 @@ const services = [
     TokenServiceImpl,
     LoginServiceImpl,
     UserSessionServiceImpl,
+    OtpCodeServiceImpl,
 ];
 
 const controllers = [
