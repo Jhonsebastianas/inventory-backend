@@ -2,6 +2,7 @@ import { IsNotEmpty } from "class-validator";
 import { Transform } from "class-transformer";
 import { FzUtil } from "@core/util/fz-util";
 import { ApiProperty } from "@nestjs/swagger";
+import { ContactDTO } from "./contact.dto";
 
 export class UserRegisterDTO {
 
@@ -18,5 +19,8 @@ export class UserRegisterDTO {
     @IsNotEmpty({ message: 'El campo clave es obligatorio' })
     @ApiProperty({ description: 'Clave de acceso del usuario', example: '123456' })
     password: string;
+
+    @ApiProperty({ description: 'Información de contacto del usuario', example: '{ email: "correo@gmail.com", cellular: { value: "3203263030", callsign: "+57" } }' })
+    contact: ContactDTO;
     
 }

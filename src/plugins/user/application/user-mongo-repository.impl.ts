@@ -30,4 +30,8 @@ export class UserRepositoryImpl implements UserMongoRepository {
         return await this.userModel.findOne({ username }).exec();
     }
 
+    async findByEmail(email: string): Promise<User> {
+        return await this.userModel.findOne({ "contact.email" : email }).exec();
+    }
+
 }

@@ -37,12 +37,22 @@ export class UserServiceImpl implements UserService {
         newUser.names = userRegister.names;
         newUser.password = claveEncriptada;
         newUser.username = userRegister.username;
+        newUser.contact = userRegister.contact;
         await this.userMongoRepository.save(newUser);
         return new ResponseDtoBuilder().ok().whitMessage("Usuario registrado con éxito").build();
     }
 
     async findByUsername(username: string): Promise<UserDTO> {
         return UserMapper.mapToUserDTO(await this.userMongoRepository.findByUsername(username));
+    }
+
+    async verifyExistingUserRecoverAccount(email: string): Promise<ResponseDTO> {
+        const user: User = await this.userMongoRepository.findByEmail(email);
+        if (user == null) {
+            throw new ConflictException("El usuario no está actualmente conectado al sistema, contactar con el administrador");
+        }
+        // send OTP
+        throw new Error("Method not implemented.");
     }
 
 }

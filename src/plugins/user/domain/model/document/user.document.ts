@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
+import { ContactDTO } from "../dto/contact.dto";
 
 @Schema({ collection: "users" })
 export class User {
@@ -13,6 +14,9 @@ export class User {
 
     @Prop({ required: true })
     password: string;
+
+    @Prop({ required: false })
+    contact: ContactDTO;
 
     @Prop({ required: true, default: false, })
     active: boolean;

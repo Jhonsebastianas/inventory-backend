@@ -42,4 +42,12 @@ export interface UserMongoRepository {
      */
     findByUsername(username: string): Promise<User>;
 
+    /**
+     * Fing user by email.
+     * Created on date 11/11/2024 at 12:03:26. <br>
+     * 
+     * @param email email of user.
+     */
+    findByEmail(email: string): Promise<User>;
+
 }

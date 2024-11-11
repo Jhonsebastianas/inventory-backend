@@ -7,6 +7,12 @@ import { TokenContext } from "./infrastructure/token.context";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { jwtConstants } from "./domain/constants";
 import { UserSessionServiceImpl } from "./application/user-session-service.impl";
+import { OtpCode, OtpCodeSchema } from "./domain/model/document/otp-code.document";
+import { MongooseModule } from "@nestjs/mongoose";
+
+const documents = [
+    { name: OtpCode.name, schema: OtpCodeSchema },
+];
 
 const dependencies = [
     UserModule,
@@ -15,9 +21,8 @@ const dependencies = [
         secret: jwtConstants.secret,
         // signOptions: { expiresIn: '60s' },
       }),
+    MongooseModule.forFeature(documents),
 ];
-
-const documents = [];
 
 const repositories = [];
 

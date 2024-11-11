@@ -19,5 +19,13 @@ export interface UserService {
      * @param username user access
      */
     findByUsername(username: string): Promise<UserDTO>;
+
+    /**
+     * Verify if existing user to recover Account
+     * Created on date 11/11/2024 at 12:09:05. <br>
+     * 
+     * @param email email of user to verify
+     */
+    verifyExistingUserRecoverAccount(email: string): Promise<ResponseDTO>;
     
 }

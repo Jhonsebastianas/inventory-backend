@@ -15,6 +15,7 @@ export class UserMapper {
         userDTO.active = user?.active;
         userDTO.password = user?.password;
         userDTO.username = user?.username;
+        userDTO.contact = user?.contact;
         return userDTO;
     }
 
@@ -28,6 +29,7 @@ export class UserMapper {
         user.names = userDTO?.names;
         user.password = userDTO?.password;
         user.username = userDTO?.username;
+        user.contact = userDTO?.contact;
         return user;
     }
 
