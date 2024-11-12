@@ -2,7 +2,9 @@ import { ResponseDTO } from "@core/domain/response.dto";
 import { LoginServiceImpl } from "@login/application/login-service-impl";
 import { UserSessionServiceImpl } from "@login/application/user-session-service.impl";
 import { cookieConstants } from "@login/domain/constants";
+import { ChangePasswordDTO } from "@login/domain/model/dto/change-password.dto";
 import { RecoverAccountInDTO } from "@login/domain/model/dto/recover-account-in.dto";
+import { RecoverAccountOutDTO } from "@login/domain/model/dto/recover-account-out.dto";
 import { SimpleLoginInDTO } from "@login/domain/model/dto/simple-login-in.dto";
 import { SimpleLoginOutDTO } from "@login/domain/model/dto/simple-login-out.dto";
 import { Body, Controller, Get, Post, Res, UsePipes, ValidationPipe } from "@nestjs/common";
@@ -55,8 +57,22 @@ export class LoginController {
     @Post('sendVerificationCodeRecoverAccount')
     @ApiOperation({ description: 'send verification code recover account' })
     @UsePipes(new ValidationPipe({ transform: true }))
-    async generateOtp(@Body() recover: RecoverAccountInDTO): Promise<ResponseDTO> {
+    async sendVerificationCodeRecoverAccount(@Body() recover: RecoverAccountInDTO): Promise<ResponseDTO> {
         return await this.loginService.sendVerificationCodeRecoverAccount(recover);
+    }
+
+    @Post('verifyRecoveryCode')
+    @ApiOperation({ description: 'verify verification code recover account' })
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async verifyRecoveryCode(@Body() recover: RecoverAccountOutDTO): Promise<ResponseDTO> {
+        return await this.loginService.verifyRecoveryCode(recover);
+    }
+
+    @Post('changePasswordRecoverAccount')
+    @ApiOperation({ description: 'change password recover account' })
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async changePasswordRecoverAccount(@Body() changePasswordDTO: ChangePasswordDTO): Promise<ResponseDTO> {
+        return await this.loginService.changePasswordRecoverAccount(changePasswordDTO);
     }
 
 }

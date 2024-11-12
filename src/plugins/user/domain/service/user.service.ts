@@ -1,6 +1,7 @@
 import { ResponseDTO } from "@core/domain/response.dto";
 import { UserRegisterDTO } from "../model/dto/user-register.dto";
 import { UserDTO } from "../model/dto/user.dto";
+import { ChangePasswordDTO } from "../../../login/domain/model/dto/change-password.dto";
 
 export interface UserService {
 
@@ -11,6 +12,23 @@ export interface UserService {
      * @param userRegister user to register in the app.
      */
     registerUser(userRegister: UserRegisterDTO): Promise<ResponseDTO>;
+
+    /**
+     * Change password
+     * Created on date 12/11/2024 at 16:17:48. <br>
+     * 
+     * @param userId
+     * @param newPassword password to change
+     */
+    changePassword(userId: string, newPassword: string): Promise<void>;
+
+    /**
+     * find user by id
+     * Created on date 12/11/2024 at 16:13:21. <br>
+     * 
+     * @param id userId
+     */
+    findById(id: string): Promise<UserDTO>;
 
     /**
      * find user by username.

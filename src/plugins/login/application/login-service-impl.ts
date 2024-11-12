@@ -16,6 +16,7 @@ import { RecoverAccountOutDTO } from "@login/domain/model/dto/recover-account-ou
 import { EmailServiceImpl } from "src/plugins/notification/application/email-service.impl";
 import { SendEmailDTO, SendEmailDTOBuilder } from "src/plugins/notification/domain/model/dto/send-email.dto";
 import { EmailParametersBuilder } from "src/plugins/notification/domain/model/dto/email-parameters.dto";
+import { ChangePasswordDTO } from "@login/domain/model/dto/change-password.dto";
 
 @Injectable()
 export class LoginServiceImpl implements LoginService {
@@ -82,6 +83,51 @@ export class LoginServiceImpl implements LoginService {
             .ok()
             .whitData(outInfo)
             .whitMessage("Código de verificación enviado al correo " + recoverAccountInfo.email)
+            .build();
+    }
+
+    async verifyRecoveryCode(recoverAccount: RecoverAccountOutDTO): Promise<ResponseDTO> {
+        const idUser = this.tokenService.getIdUserByToken(recoverAccount.token);
+        const user: UserDTO = await this.userService.findById(idUser);
+
+        if (user == null) {
+            throw new UnauthorizedException("Correo electrónico incorrecto.");
+        }
+
+        if (user.contact.email != recoverAccount.email) {
+            throw new UnauthorizedException("Correo electrónico incorrecto.");
+        }
+
+        const isCodeOk: boolean = await this.otpCodeService.verifyOtp(idUser, recoverAccount.code);
+
+        if (!isCodeOk) {
+            throw new UnauthorizedException("Código de verifiación incorrecto");
+        }
+
+        return new ResponseDtoBuilder()
+            .ok()
+            .whitData(recoverAccount)
+            .whitMessage("Código de verificación confirmado")
+            .build();
+    }
+
+    async changePasswordRecoverAccount(changePassword: ChangePasswordDTO): Promise<ResponseDTO> {
+        const idUser = this.tokenService.getIdUserByToken(changePassword.token);
+        const user: UserDTO = await this.userService.findById(idUser);
+
+        if (user == null) {
+            throw new UnauthorizedException("Correo electrónico incorrecto.");
+        }
+
+        if (user.contact.email != changePassword.email) {
+            throw new UnauthorizedException("Correo electrónico incorrecto.");
+        }
+
+        await this.userService.changePassword(idUser, changePassword.newPassword);
+
+        return new ResponseDtoBuilder()
+            .ok()
+            .whitMessage("Contraseña cambiada con exito")
             .build();
     }
 

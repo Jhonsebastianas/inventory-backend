@@ -42,6 +42,22 @@ export class UserServiceImpl implements UserService {
         return new ResponseDtoBuilder().ok().whitMessage("Usuario registrado con éxito").build();
     }
 
+    async changePassword(userId: string, newPassword: string): Promise<void> {
+        let newEncryptedPassword: string;
+        try {
+            newEncryptedPassword = await EncryptService.encrypt(newPassword);
+        } catch (error) {
+            throw new UnexpectedException("No fue posible encriptar la clave", error);
+        }
+        const user = await this.userMongoRepository.findById(userId);
+        user.password = newEncryptedPassword;
+        await this.userMongoRepository.update(user);
+    }
+
+    async findById(id: string): Promise<UserDTO> {
+        return UserMapper.mapToUserDTO(await this.userMongoRepository.findById(id));
+    }
+
     async findByUsername(username: string): Promise<UserDTO> {
         return UserMapper.mapToUserDTO(await this.userMongoRepository.findByUsername(username));
     }

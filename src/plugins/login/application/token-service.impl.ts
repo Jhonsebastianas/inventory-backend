@@ -27,4 +27,8 @@ export class TokenServiceImpl implements TokenService {
         return this.verify(token);
     }
 
+    getIdUserByToken(token: string): string {
+        return this.verify(token);
+    }
+
 }

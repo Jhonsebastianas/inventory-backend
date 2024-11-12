@@ -3,6 +3,8 @@ import { ResponseDTO } from "@core/domain/response.dto";
 import { SimpleLoginInDTO } from "@login/domain/model/dto/simple-login-in.dto";
 import { SimpleLoginOutDTO } from "@login/domain/model/dto/simple-login-out.dto";
 import { RecoverAccountInDTO } from "../model/dto/recover-account-in.dto";
+import { RecoverAccountOutDTO } from "../model/dto/recover-account-out.dto";
+import { ChangePasswordDTO } from "../model/dto/change-password.dto";
 
 export interface LoginService {
 
@@ -24,4 +26,17 @@ export interface LoginService {
      * @param { RecoverAccountInDTO } recoverAccountInfo email of user to recover account
      */
     sendVerificationCodeRecoverAccount(recoverAccountInfo: RecoverAccountInDTO): Promise<ResponseDTO>;
+
+    /**
+     * Verify recovery code.
+     * 
+     * @param recoverAccount token and userId to recover
+     */
+    verifyRecoveryCode(recoverAccount: RecoverAccountOutDTO): Promise<ResponseDTO>;
+
+    /**
+     * 
+     * @param changePassword change password info
+     */
+    changePasswordRecoverAccount(changePassword: ChangePasswordDTO): Promise<ResponseDTO>;
 }

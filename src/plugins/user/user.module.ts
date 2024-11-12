@@ -22,7 +22,9 @@ const controllers = [
 ];
 
 @Module({
-    imports: [MongooseModule.forFeature(documents)],
+    imports: [
+        MongooseModule.forFeature(documents),
+    ],
     controllers,
     providers: [
         ...repositories,
