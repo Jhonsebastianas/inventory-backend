@@ -24,7 +24,7 @@ export class Product {
     @Prop({ required: false, type: [ StockDetailSchema ] })
     stockDetails: StockDetail[];
 
-    @Prop({ required: false, type: Number })
+    @Prop({ required: false, type: Number, default: 6 })
     quantityStockReplenished: number; // indica cuando se tiene que reemplazar el stock
 
     @Prop({ required: false, type: Number })

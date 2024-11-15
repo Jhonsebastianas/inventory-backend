@@ -15,4 +15,10 @@ export interface EmailService {
      * @param sendEmailDTO 
      */
     sendRecoverAccountMail(sendEmailDTO: SendEmailDTO): Promise<void>;
+
+    /**
+     * 
+     * @param sendEmailDTO email information to send
+     */
+    sendNotificationsLowProductStock(sendEmailDTO: SendEmailDTO): Promise<void>;
 }

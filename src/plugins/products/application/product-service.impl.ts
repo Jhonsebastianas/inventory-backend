@@ -10,6 +10,11 @@ import { ConflictException } from "@core/exceptions/manager.exception";
 import { StockDetailMapper } from "../domain/repository/internal/mapper/stock-detail.mapper";
 import { BusinessServiceImpl } from "src/plugins/business/application/business-service.impl";
 import { Types } from "mongoose";
+import { SendEmailDTO, SendEmailDTOBuilder } from "src/plugins/notification/domain/model/dto/send-email.dto";
+import { UserServiceImpl } from "@user/application/user-service.impl";
+import { UserDTO } from "@user/domain/model/dto/user.dto";
+import { EmailParametersBuilder } from "src/plugins/notification/domain/model/dto/email-parameters.dto";
+import { EmailServiceImpl } from "src/plugins/notification/application/email-service.impl";
 
 
 @Injectable()
@@ -18,8 +23,10 @@ export class ProductServiceImpl implements ProductService {
     private readonly logger = new Logger(ProductServiceImpl.name, { timestamp: true });
 
     constructor(
-        private productMongoRepository: ProductRepositoryImpl,
         private businessService: BusinessServiceImpl,
+        private emailService: EmailServiceImpl,
+        private productMongoRepository: ProductRepositoryImpl,
+        private userService: UserServiceImpl,
     ) { }
 
     async registerProduct(productRegister: ProductRegisterDTO): Promise<ResponseDTO> {
@@ -136,7 +143,20 @@ export class ProductServiceImpl implements ProductService {
         if (product.stock <= product.quantityStockReplenished) {
             this.logger.log("Inventario próximo a reordenar");
             console.log("Inventario próximo a reordenar");
-            // Aquí podrías implementar alguna lógica adicional, como notificaciones
+            const business = await this.businessService.getBusinessWorkingOn();
+            const userOwnerBusiness: UserDTO = await this.userService.findById(business.ownerId);
+            const sendEmailDTO: SendEmailDTO = new SendEmailDTOBuilder()
+            .withRecipientEmails([userOwnerBusiness.contact.email])
+                .withParameters(new EmailParametersBuilder()
+                    .withEmail(userOwnerBusiness.contact.email)
+                    .withUserNames(userOwnerBusiness.names)
+                    .withProductName(product.name)
+                    .withCurrentStock(product.stock.toString())
+                    .withQuantityStockReplenished(product.quantityStockReplenished.toString())
+                    .build()
+                )
+            .build();
+            this.emailService.sendNotificationsLowProductStock(sendEmailDTO);
         }
     
         // Finalmente, actualizamos el producto

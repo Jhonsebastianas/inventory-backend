@@ -1,7 +1,10 @@
 export class EmailParameters {
+    currentStock: string;
     userNames: string;
     email: string;
     otpCode: string;
+    productName: string;
+    quantityStockReplenished: string;
 }
 
 
@@ -10,10 +13,18 @@ export class EmailParametersBuilder {
 
     constructor() {
         this._emailParameters = {
+            currentStock: '',
             userNames: '',
             email: '',
             otpCode: '',
+            productName: '',
+            quantityStockReplenished: '',
         };
+    }
+
+    withCurrentStock(currentStock: string): EmailParametersBuilder {
+        this._emailParameters.currentStock = currentStock;
+        return this;
     }
 
     withUserNames(userNames: string): EmailParametersBuilder {
@@ -28,6 +39,16 @@ export class EmailParametersBuilder {
 
     withOtpCode(otpCode: string): EmailParametersBuilder {
         this._emailParameters.otpCode = otpCode;
+        return this;
+    }
+
+    withProductName(productName: string): EmailParametersBuilder {
+        this._emailParameters.productName = productName;
+        return this;
+    }
+
+    withQuantityStockReplenished(quantityStockReplenished: string): EmailParametersBuilder {
+        this._emailParameters.quantityStockReplenished = quantityStockReplenished;
         return this;
     }
 

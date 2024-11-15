@@ -18,6 +18,12 @@ export class EmailServiceImpl implements EmailService {
         await this.sendMail("Recuperar cuenta", contentHTML, sendEmailDTO.recipientEmails);
     }
 
+    async sendNotificationsLowProductStock(sendEmailDTO: SendEmailDTO): Promise<void> {
+        sendEmailDTO.pathTemplate = "/public/plantillas/low_product_stock.html";
+        const contentHTML = await this.buildPlantilla(sendEmailDTO);
+        await this.sendMail("Aviso: Producto con inventario bajo", contentHTML, sendEmailDTO.recipientEmails);
+    }
+
     async sendMail(subject: string, message: string, recipientEmails: string[]): Promise<void> {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
