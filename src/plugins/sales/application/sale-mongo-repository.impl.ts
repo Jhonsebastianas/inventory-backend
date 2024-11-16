@@ -37,4 +37,9 @@ export class SaleRepositoryImpl implements SaleMongoRepository {
         return await this.saleModel.find({ businessId: new Types.ObjectId(currentBusiness.id) });
     }
 
+    async findByDateRange(startDate: Date, endDate: Date): Promise<Sale[]> {
+        const currentBusiness = await this.businessService.getBusinessWorkingOn();
+        return await this.saleModel.find({ createdAt: { $gte: startDate, $lt: endDate }, businessId: new Types.ObjectId(currentBusiness.id) });
+    }
+
 }

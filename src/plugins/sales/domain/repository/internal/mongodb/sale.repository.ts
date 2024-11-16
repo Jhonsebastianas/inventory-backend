@@ -51,4 +51,11 @@ export interface SaleMongoRepository {
      */
     findAll(): Promise<Sale[]>;
 
+    /**
+     * 
+     * @param startDate start date to find
+     * @param endDate 
+     */
+    findByDateRange(startDate: Date, endDate: Date): Promise<Sale[]>;
+
 }

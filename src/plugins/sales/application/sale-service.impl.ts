@@ -12,6 +12,9 @@ import { CreateSaleDTO } from "../domain/model/dto/create-sale.dto";
 import { SaleProductMapper } from "../domain/repository/internal/mapper/sale-product.mapper";
 import { ProductServiceImpl } from "src/plugins/products/application/product-service.impl";
 import { BusinessServiceImpl } from "src/plugins/business/application/business-service.impl";
+import { SalesConsultationInDTO } from "../domain/model/dto/sales-consultation-in.dto";
+import { SalesConsultationOutDTO } from "../domain/model/dto/sales-consultation-out.dto";
+import { MetricsSalesConsultation } from "../domain/model/dto/metrics-sales-consultation";
 
 
 @Injectable()
@@ -53,6 +56,17 @@ export class SaleServiceImpl implements SaleService {
 
     async findAll(): Promise<SaleDTO[]> {
         return (await this.saleMongoRepository.findAll()).flatMap(sale => SaleMapper.mapToSaleDTO(sale));
+    }
+
+
+    async salesConsultation(consultation: SalesConsultationInDTO): Promise<SalesConsultationOutDTO> {
+        const sales: SaleDTO[] = (await this.saleMongoRepository.findByDateRange(consultation.startDate, consultation.endDate)).flatMap(sale => SaleMapper.mapToSaleDTO(sale));
+        const metrics = new MetricsSalesConsultation();
+        metrics.totalInvoiced = sales.map(sale => sale.totalInvoiced).reduce((total, current) => total += current, 0);
+        const consultationOut = new SalesConsultationOutDTO();
+        consultationOut.sales = sales;
+        consultationOut.metrics = metrics;
+        return consultationOut;
     }
 
 
