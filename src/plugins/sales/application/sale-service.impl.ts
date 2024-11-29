@@ -15,12 +15,14 @@ import { BusinessServiceImpl } from "src/plugins/business/application/business-s
 import { SalesConsultationInDTO } from "../domain/model/dto/sales-consultation-in.dto";
 import { SalesConsultationOutDTO } from "../domain/model/dto/sales-consultation-out.dto";
 import { MetricsSalesConsultation } from "../domain/model/dto/metrics-sales-consultation";
+import { ClientServiceImpl } from "src/plugins/clients/application/client-service.impl";
 
 
 @Injectable()
 export class SaleServiceImpl implements SaleService {
 
     constructor(
+        private clientService: ClientServiceImpl,
         private saleMongoRepository: SaleRepositoryImpl,
         private userSessionServiceImpl: UserSessionServiceImpl,
         private productService: ProductServiceImpl,
@@ -28,13 +30,18 @@ export class SaleServiceImpl implements SaleService {
     ) { }
 
     async registerSale(saleToRegister: CreateSaleDTO): Promise<ResponseDTO> {
-        // if (saleToRegister.idUser) {
-        //     return new ResponseDtoBuilder().ok().whitMessage("La venta ya se encuentra registrada").build();
-        // }
-
         const currentBusiness = await this.businessService.getBusinessWorkingOn();
 
+        // Registro de cliente
+        let client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
+        console.log(client);
+        if (client == null) {
+            await this.clientService.registerClient(saleToRegister.client);
+            client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
+        }
+
         const newSale = new Sale();
+        newSale.clientId = new Types.ObjectId(client.id);
         newSale.createdAt = FzUtil.getCurrentDate();
         newSale.idUser = new Types.ObjectId(await this.userSessionServiceImpl.getIdUser());
         newSale.businessId = new Types.ObjectId(currentBusiness.id);

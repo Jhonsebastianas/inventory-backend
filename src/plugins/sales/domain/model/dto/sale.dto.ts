@@ -6,6 +6,7 @@ export class SaleDTO {
     id: string;
     idUser: string;
     businessId: string;
+    clientId: string;
     invoiceIdentifier: string;
     createdAt: Date;
     products: SaleProduct[];

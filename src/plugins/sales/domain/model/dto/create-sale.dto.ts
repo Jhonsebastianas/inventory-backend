@@ -4,6 +4,7 @@ import { SalePaymentMethodDTO } from './sale-payment-method.dto';
 import { FileDTO } from 'src/plugins/file-system/domain/model/dto/file.dto';
 import { SaleProductDTO } from './sale-product.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { RegisterClientInDTO } from 'src/plugins/clients/domain/model/dto/register-client-in.dto';
 
 export class CreateSaleDTO {
 
@@ -24,4 +25,10 @@ export class CreateSaleDTO {
   @ValidateNested()
   @Type(() => FileDTO) // Referencia al DTO genérico de archivo
   proofPayment?: FileDTO;
+
+  @ApiProperty({ description: 'Cliente', example: new RegisterClientInDTO() })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => RegisterClientInDTO) // Referencia al DTO genérico de archivo
+  client: RegisterClientInDTO;
 }

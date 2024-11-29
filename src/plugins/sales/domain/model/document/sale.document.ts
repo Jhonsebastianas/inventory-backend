@@ -14,6 +14,9 @@ export class Sale {
     @Prop({ required: true, type: Types.ObjectId, ref: 'business', name: "_id" })
     businessId: Types.ObjectId;
 
+    @Prop({ required: false, type: Types.ObjectId, ref: 'clients', name: "_id" })
+    clientId: Types.ObjectId;
+
     @Prop({ required: false, type: String, name: "invoice_identifier", default: FzUtil.genUUID()})
     invoiceIdentifier: string;
 

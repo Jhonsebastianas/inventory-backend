@@ -11,6 +11,7 @@ import { Client } from "../domain/model/document/client.document";
 import { ConflictException } from "@core/exceptions/manager.exception";
 import { Types } from "mongoose";
 import { ClientMapper } from "../domain/repository/mapper/client.mapper";
+import * as fs from "fs";
 
 @Injectable()
 export class ClientServiceImpl implements ClientService {
@@ -29,6 +30,11 @@ export class ClientServiceImpl implements ClientService {
             throw new ConflictException("El cliente ya se encuentra registrado en el sistema");
         }
         const business = await this.businessService.getBusinessWorkingOn();
+
+        // Indentificación
+        const documentTypes: TypeIdentificationDTO[] = JSON.parse(fs.readFileSync(process.cwd() + `/public/data/document_types.json`, { encoding: 'utf8', flag: 'r' }).toString());
+        const typeDocument = documentTypes.find(document => document.id == clientRegister.identification.type.id);
+        clientRegister.identification.type = typeDocument;
 
         const newClient = new Client();
         newClient.active = true;

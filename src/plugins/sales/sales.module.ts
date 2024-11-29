@@ -7,6 +7,7 @@ import { SaleController } from "./infrastructure/sale.controller";
 import { LoginModule } from "@login/login.module";
 import { ProductsModule } from "../products/products.module";
 import { BusinessModule } from "../business/business.module";
+import { ClientsModule } from "../clients/clients.module";
 
 const documents = [
     { name: Sale.name, schema: SaleSchema },
@@ -30,6 +31,7 @@ const controllers = [
         LoginModule,
         BusinessModule,
         ProductsModule,
+        ClientsModule,
     ],
     controllers,
     providers: [
