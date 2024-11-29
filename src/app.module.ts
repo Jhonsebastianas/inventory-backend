@@ -9,9 +9,9 @@ import { ProductsModule } from './plugins/products/products.module';
 import { SalesModule } from './plugins/sales/sales.module';
 import { FileSystemModule } from './plugins/file-system/file-system.module';
 import { BusinessModule } from './plugins/business/business.module';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
 import { NotificationModule } from './plugins/notification/notification.module';
+import { ClientsModule } from './plugins/clients/clients.module';
 
 const providers = [
   AppService,
@@ -29,6 +29,7 @@ const providers = [
     ProductsModule,
     SalesModule,
     FinancialRegisterModule,
+    ClientsModule,
   ],
   controllers: [AppController],
   providers,
