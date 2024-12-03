@@ -15,6 +15,10 @@ export class ProductRegisterDTO {
     @ApiProperty({ description: 'Descipción del producto (opcional)', example: 'Con jamón y quesito' })
     description: string;
 
+    @Transform((presentation) => presentation.value.trim().toLowerCase())
+    @ApiProperty({ description: 'Presentación del producto (opcional)', example: 'unidad, 150 ml' })
+    presentation: string;
+
     @IsNotEmpty({ message: 'El campo precio es obligatorio' })
     @ApiProperty({ description: 'Precio unitario del producto', example: '2000' })
     price: number;

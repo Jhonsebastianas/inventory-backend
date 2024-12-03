@@ -18,6 +18,7 @@ export class ProductMapper {
         productDTO.stock = product?.stock;
         productDTO.stockDetails = product?.stockDetails.flatMap(detail => StockDetailMapper.mapToStockDetailDTO(detail));
         productDTO.percentageTax = product?.percentageTax;
+        productDTO.presentation = product?.presentation;
         productDTO.quantityStockReplenished = product?.quantityStockReplenished;
         productDTO.weightedAveragePurchasePrice = product?.weightedAveragePurchasePrice;
         return productDTO;
@@ -36,6 +37,7 @@ export class ProductMapper {
         product.stock = productDTO?.stock;
         product.stockDetails = productDTO?.stockDetails.flatMap(detail => StockDetailMapper.mapToStockDetail(detail));
         product.percentageTax = productDTO?.percentageTax;
+        product.presentation = productDTO?.presentation;
         product.quantityStockReplenished = productDTO?.quantityStockReplenished;
         product.weightedAveragePurchasePrice = productDTO?.weightedAveragePurchasePrice;
         return product;

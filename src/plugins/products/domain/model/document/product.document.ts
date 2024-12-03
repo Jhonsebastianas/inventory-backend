@@ -21,6 +21,9 @@ export class Product {
     @Prop({ required: true, default: false, })
     stock: number;
 
+    @Prop({ required: false, default: "unidad", })
+    presentation: string; // unidad, 150 ml
+
     @Prop({ required: false, type: [ StockDetailSchema ] })
     stockDetails: StockDetail[];
 

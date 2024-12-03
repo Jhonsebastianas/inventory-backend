@@ -9,6 +9,7 @@ export class ProductDTO {
     stock: number;
     stockDetails: StockDetailDTO[];
     percentageTax: number;
+    presentation: string; // unidad, 150 ml
     quantityStockReplenished: number;
     weightedAveragePurchasePrice: number;
 }
