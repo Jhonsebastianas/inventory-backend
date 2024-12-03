@@ -33,15 +33,21 @@ export class SaleServiceImpl implements SaleService {
         const currentBusiness = await this.businessService.getBusinessWorkingOn();
 
         // Registro de cliente
-        let client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
-        console.log(client);
-        if (client == null) {
-            await this.clientService.registerClient(saleToRegister.client);
+        let client;
+        if (saleToRegister.client != null) {
             client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
+            if (client == null) {
+                await this.clientService.registerClient(saleToRegister.client);
+                client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
+            }
         }
 
+
+
         const newSale = new Sale();
-        newSale.clientId = new Types.ObjectId(client.id);
+        if (client != null) {
+            newSale.clientId = new Types.ObjectId(client?.id);
+        }
         newSale.createdAt = FzUtil.getCurrentDate();
         newSale.idUser = new Types.ObjectId(await this.userSessionServiceImpl.getIdUser());
         newSale.businessId = new Types.ObjectId(currentBusiness.id);

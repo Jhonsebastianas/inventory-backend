@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsArray, IsOptional, ValidateNested, IsObject } from 'class-validator';
+import { IsString, IsNumber, IsArray, IsOptional, ValidateNested, IsObject, ValidateIf } from 'class-validator';
 import { Type } from 'class-transformer';
 import { SalePaymentMethodDTO } from './sale-payment-method.dto';
 import { FileDTO } from 'src/plugins/file-system/domain/model/dto/file.dto';
@@ -27,8 +27,9 @@ export class CreateSaleDTO {
   proofPayment?: FileDTO;
 
   @ApiProperty({ description: 'Cliente', example: new RegisterClientInDTO() })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => RegisterClientInDTO) // Referencia al DTO genérico de archivo
+  @ValidateIf((o) => o.client != null)  // Ejecuta validaciones solo si client no es null o undefined
+  @IsOptional()  // Permite que el campo sea opcional
+  @ValidateNested()  // Valida las propiedades del objeto si existe
+  @Type(() => RegisterClientInDTO)  // Especifica el tipo DTO para la transformación
   client: RegisterClientInDTO;
 }
