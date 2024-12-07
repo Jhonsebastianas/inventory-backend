@@ -19,8 +19,9 @@ export class SaleRepositoryImpl implements SaleMongoRepository {
     ) { }
 
     async save(sale: Sale): Promise<Sale> {
+        const currentBusiness = await this.businessService.getBusinessWorkingOn();
         const prefix = PREFIX.INVOICE;
-        const sequence = await this.counterService.getNextSequence(SEQUENCE.SEQ_INVOICE);
+        const sequence = await this.counterService.getNextSequence(SEQUENCE.SEQ_INVOICE + '_' + currentBusiness.id);
         const invoice = FzUtil.padWithZeros(sequence, 10);
         sale.invoiceIdentifier = prefix + invoice;
         const newUser = new this.saleModel(sale);
