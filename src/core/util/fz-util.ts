@@ -49,7 +49,17 @@ export class FzUtil {
             heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
             external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
         };
-        
+
         console.log(memoryUsage);
+    }
+
+    /**
+     * Agrega ceros a la izquierda de un número hasta alcanzar un tamaño máximo.
+     * @param num - El número al que se le agregarán ceros.
+     * @param length - La longitud total deseada.
+     * @returns Una cadena con el número con ceros a la izquierda.
+     */
+    static padWithZeros(num: number, length: number): string {
+        return num.toString().padStart(length, '0');
     }
 }

@@ -3,18 +3,26 @@ import { SaleMongoRepository } from "../domain/repository/internal/mongodb/sale.
 import { Sale } from "../domain/model/document/sale.document";
 import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { SaleDTO } from "../domain/model/dto/sale.dto";
 import { BusinessServiceImpl } from "src/plugins/business/application/business-service.impl";
+import { CounterServiceImpl } from "@core/application/counter-service.impl";
+import { SEQUENCE } from "@core/util/sequences";
+import { FzUtil } from "@core/util/fz-util";
+import { PREFIX } from "@core/util/prefix";
 
 @Injectable()
 export class SaleRepositoryImpl implements SaleMongoRepository {
 
     constructor(
         @InjectModel(Sale.name) private saleModel: Model<Sale>,
+        private counterService: CounterServiceImpl,
         private businessService: BusinessServiceImpl,
     ) { }
 
     async save(sale: Sale): Promise<Sale> {
+        const prefix = PREFIX.INVOICE;
+        const sequence = await this.counterService.getNextSequence(SEQUENCE.SEQ_INVOICE);
+        const invoice = FzUtil.padWithZeros(sequence, 10);
+        sale.invoiceIdentifier = prefix + invoice;
         const newUser = new this.saleModel(sale);
         return await newUser.save();
     }

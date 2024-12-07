@@ -8,6 +8,7 @@ import { LoginModule } from "@login/login.module";
 import { ProductsModule } from "../products/products.module";
 import { BusinessModule } from "../business/business.module";
 import { ClientsModule } from "../clients/clients.module";
+import { CoreModule } from "@core/core.module";
 
 const documents = [
     { name: Sale.name, schema: SaleSchema },
@@ -28,6 +29,7 @@ const controllers = [
 @Module({
     imports: [
         MongooseModule.forFeature(documents),
+        CoreModule,
         LoginModule,
         BusinessModule,
         ProductsModule,

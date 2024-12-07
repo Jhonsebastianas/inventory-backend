@@ -12,6 +12,7 @@ import { BusinessModule } from './plugins/business/business.module';
 import { ConfigModule } from '@nestjs/config';
 import { NotificationModule } from './plugins/notification/notification.module';
 import { ClientsModule } from './plugins/clients/clients.module';
+import { CoreModule } from '@core/core.module';
 
 const providers = [
   AppService,
@@ -21,6 +22,7 @@ const providers = [
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     MongooseModule.forRoot('mongodb+srv://inventorybackend:oTy7FGJgr38fLQJJ@cluster0.i504v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0Finances'),
+    CoreModule,
     FileSystemModule,
     NotificationModule,
     UserModule,
