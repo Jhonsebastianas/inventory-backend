@@ -49,7 +49,7 @@ export class SaleServiceImpl implements SaleService {
 
 
 
-        const newSale = new Sale();
+        let newSale = new Sale();
         if (client != null) {
             newSale.clientId = new Types.ObjectId(client?.id);
         }
@@ -68,8 +68,8 @@ export class SaleServiceImpl implements SaleService {
         // REGISTRO DE FACTURA
         //newSale.proofPayment
 
-        await this.saleMongoRepository.save(newSale);
-        return new ResponseDtoBuilder().created().whitMessage("Venta registrada con éxito").build();
+        newSale = await this.saleMongoRepository.save(newSale);
+        return new ResponseDtoBuilder().created().whitData(newSale._id).whitMessage("Venta registrada con éxito").build();
     }
 
     async findAll(): Promise<SaleDTO[]> {
