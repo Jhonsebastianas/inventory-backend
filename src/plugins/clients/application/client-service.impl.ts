@@ -56,4 +56,8 @@ export class ClientServiceImpl implements ClientService {
         return ClientMapper.mapToClientDTO(await this.clientRepository.findByIdentification(identificacion));
     }
 
+    async findByIdClient(idClient: string): Promise<ClientDTO> {
+        return ClientMapper.mapToClientDTO(await this.clientRepository.findById(idClient));
+    }
+
 }

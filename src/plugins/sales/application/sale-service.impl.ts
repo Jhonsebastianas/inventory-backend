@@ -16,6 +16,10 @@ import { SalesConsultationInDTO } from "../domain/model/dto/sales-consultation-i
 import { SalesConsultationOutDTO } from "../domain/model/dto/sales-consultation-out.dto";
 import { MetricsSalesConsultation } from "../domain/model/dto/metrics-sales-consultation";
 import { ClientServiceImpl } from "src/plugins/clients/application/client-service.impl";
+import { SaleDetailDTO } from "../domain/model/dto/sale-detail/sale-detail.dto";
+import { UserServiceImpl } from "@user/application/user-service.impl";
+import { UserDTO } from "@user/domain/model/dto/user.dto";
+import { SaleDetailUser } from "../domain/model/dto/sale-detail/sale-detail-user";
 
 
 @Injectable()
@@ -25,6 +29,7 @@ export class SaleServiceImpl implements SaleService {
         private clientService: ClientServiceImpl,
         private saleMongoRepository: SaleRepositoryImpl,
         private userSessionServiceImpl: UserSessionServiceImpl,
+        private userServiceImpl: UserServiceImpl,
         private productService: ProductServiceImpl,
         private businessService: BusinessServiceImpl,
     ) { }
@@ -82,5 +87,22 @@ export class SaleServiceImpl implements SaleService {
         return consultationOut;
     }
 
+    async findSalesDetailByIdSale(idSale: string): Promise<SaleDetailDTO> {
+        const sale: SaleDTO = SaleMapper.mapToSaleDTO(await this.saleMongoRepository.findById(idSale));
+        const saleDetail = new SaleDetailDTO();
+        Object.assign(saleDetail, sale);
+
+        const userSold: UserDTO = await this.userServiceImpl.findById(sale.idUser);
+        const userDetail = new SaleDetailUser();
+        userDetail.id = sale.idUser;
+        userDetail.names = userSold.names;
+        saleDetail.userSold = userDetail;
+
+        if (sale.clientId) {
+            saleDetail.client = await this.clientService.findByIdClient(sale.clientId);
+        }
+        
+        return saleDetail;
+    }
 
 }

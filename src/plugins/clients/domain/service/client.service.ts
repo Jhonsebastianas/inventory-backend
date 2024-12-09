@@ -18,4 +18,11 @@ export interface ClientService {
      * @param numberIdentification number of identification
      */
     findClientByIdentification(idType: string, numberIdentification: string): Promise<ClientDTO>;
+
+    /**
+     * find client by id
+     * Created on date 09/12/2024 at 12:47:30. <br>
+     * @param idClient cliente idetification
+     */
+    findByIdClient(idClient: string): Promise<ClientDTO>;
 }
