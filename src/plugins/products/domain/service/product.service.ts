@@ -6,7 +6,7 @@ export interface ProductService {
 
     /**
      * Register a product to the application.
-     * Created on 26/04/2024 at 09:54 p.m. <br>
+     * Created on 26/10/2024 at 09:54 p.m. <br>
      * 
      * @param { ProductRegisterDTO } productRegister product to register in the app.
      */
@@ -14,7 +14,7 @@ export interface ProductService {
 
     /**
      * Update one product by id
-     * Created on 26/04/2024 at 09:57 p.m. <br>
+     * Created on 26/10/2024 at 09:57 p.m. <br>
      * 
      * @param { string } id id product
      * @param { ProductDTO } productUpdate product to update
@@ -23,7 +23,7 @@ export interface ProductService {
 
     /**
      * Delete product by id
-     * Created on 26/04/2024 at 09:58 p.m. <br>
+     * Created on 26/10/2024 at 09:58 p.m. <br>
      * 
      * @param { string } id id product
      */
@@ -31,20 +31,20 @@ export interface ProductService {
 
     /**
      * find all products
-     * Created on 26/04/2024 at 09:54 p.m. <br>
+     * Created on 26/10/2024 at 09:54 p.m. <br>
      */
     findAll(): Promise<ProductDTO[]>
 
     /**
      * Find product by PK
-     * Created on 26/04/2024 at 09:59 p.m. <br>
+     * Created on 26/10/2024 at 09:59 p.m. <br>
      * @param { string } id id product
      */
     findById(id: string): Promise<ProductDTO>;
 
     /**
      * find product name.
-     * Created on 26/04/2024 at 09:54 p.m. <br>
+     * Created on 26/10/2024 at 09:54 p.m. <br>
      * 
      * @param { string } name user access
      */
@@ -52,7 +52,7 @@ export interface ProductService {
 
     /**
      * find products like name.
-     * Created on 26/04/2024 at 09:54 p.m. <br>
+     * Created on 26/10/2024 at 09:54 p.m. <br>
      * 
      * @param { string } name user access
      */

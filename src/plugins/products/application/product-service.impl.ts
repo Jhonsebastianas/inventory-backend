@@ -59,7 +59,9 @@ export class ProductServiceImpl implements ProductService {
         });
 
         newProduct.quantityStockReplenished = product?.quantityStockReplenished;
-        newProduct.weightedAveragePurchasePrice = sumTotalPurchasePrices / newProduct.stock;
+        if (newProduct.stock != 0) {
+            newProduct.weightedAveragePurchasePrice = sumTotalPurchasePrices / newProduct.stock;
+        }
 
         await this.productMongoRepository.save(newProduct);
         return new ResponseDtoBuilder().ok().whitMessage("Producto registrado con éxito").build();
