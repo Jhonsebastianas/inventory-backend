@@ -3,6 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export class FzUtil {
     static toTitleCase(value: string): string {
+        if (this.isEmptyNull(value)) {
+            return value;
+        }
         return value
             .toLowerCase()
             .trim()

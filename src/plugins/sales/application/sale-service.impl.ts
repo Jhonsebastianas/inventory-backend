@@ -43,7 +43,7 @@ export class SaleServiceImpl implements SaleService {
             client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
             if (client == null) {
                 await this.clientService.registerClient(saleToRegister.client);
-                client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
+                client = await this.clientService.findClientByIdentification(saleToRegister.client?.identification?.type?.id, saleToRegister.client?.identification?.value);
             }
         }
 
