@@ -17,10 +17,10 @@ export class StockDetail {
     @Prop({ required: true, type: Number })
     totalPurchasePrice: number;
 
-    @Prop({ required: true, default: 0, })
+    @Prop({ required: true, default: 0.0, type: Number  })
     quantity: number;
 
-    @Prop({ required: true, default: 0, })
+    @Prop({ required: true, default: 0.0, type: Number })
     quantityPurchased: number;
 
 }

@@ -18,7 +18,7 @@ export class Product {
     @Prop({ required: true, type: Number })
     price: number; // selling price
 
-    @Prop({ required: true, default: false, })
+    @Prop({ required: true, default: false, type: Number })
     stock: number;
 
     @Prop({ required: false, default: "unidad", })
