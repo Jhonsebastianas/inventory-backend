@@ -37,39 +37,73 @@ export class SaleServiceImpl implements SaleService {
     async registerSale(saleToRegister: CreateSaleDTO): Promise<ResponseDTO> {
         const currentBusiness = await this.businessService.getBusinessWorkingOn();
 
-        // Registro de cliente
-        let client;
-        if (saleToRegister.client != null) {
-            client = await this.clientService.findClientByIdentification(saleToRegister.client.identification.type.id, saleToRegister.client.identification.value);
-            if (client == null) {
+        // Registro o búsqueda del cliente
+        let client = null;
+        if (saleToRegister.client) {
+            client = await this.clientService.findClientByIdentification(
+                saleToRegister.client.identification.type.id,
+                saleToRegister.client.identification.value
+            );
+            if (!client) {
                 await this.clientService.registerClient(saleToRegister.client);
-                client = await this.clientService.findClientByIdentification(saleToRegister.client?.identification?.type?.id, saleToRegister.client?.identification?.value);
+                client = await this.clientService.findClientByIdentification(
+                    saleToRegister.client.identification.type.id,
+                    saleToRegister.client.identification.value
+                );
             }
         }
 
+        // Obtención del ID de usuario en sesión
+        const userId = new Types.ObjectId(await this.userSessionServiceImpl.getIdUser());
 
+        // Procesamiento de productos
+        const productsWithDetails = await Promise.all(
+            saleToRegister.products.map(async (product) => {
+                const productDetails = await this.productService.findById(product.id);
+                return {
+                    idProducto: new Types.ObjectId(product.id),
+                    name: productDetails.name,
+                    price: product.price,
+                    purchasePrice: productDetails.weightedAveragePurchasePrice, // Precio de compra
+                    quantity: product.quantity,
+                    profit: product.price - productDetails.weightedAveragePurchasePrice, // Ganancia por unidad
+                    totalProfit: (product.price - productDetails.weightedAveragePurchasePrice) * product.quantity, // Ganancia total
+                };
+            })
+        );
 
-        let newSale = new Sale();
-        if (client != null) {
-            newSale.clientId = new Types.ObjectId(client?.id);
-        }
+        // Cálculo de métricas totales
+        const totalInvoiced = productsWithDetails.reduce((total, product) => total + product.price * product.quantity, 0);
+        const totalProducts = productsWithDetails.reduce((total, product) => total + product.quantity, 0);
+        const totalProfit = productsWithDetails.reduce((total, product) => total + product.totalProfit, 0);
+
+        // Reducción de inventarios
+        await Promise.all(
+            saleToRegister.products.map((product) =>
+                this.productService.reduceInventories(product.id, product.quantity)
+            )
+        );
+
+        // Creación de la venta
+        const newSale = new Sale();
+        if (client) newSale.clientId = new Types.ObjectId(client.id);
         newSale.createdAt = FzUtil.getCurrentDate();
-        newSale.idUser = new Types.ObjectId(await this.userSessionServiceImpl.getIdUser());
+        newSale.idUser = userId;
         newSale.businessId = new Types.ObjectId(currentBusiness.id);
         newSale.paymentMethods = saleToRegister.paymentMethods;
-        newSale.products = saleToRegister.products.flatMap(product => SaleProductMapper.mapToSaleProduct(product));
-        newSale.totalInvoiced = saleToRegister.products.reduce((total, precio) => total += precio.price * precio.quantity, 0);
-        newSale.totalProducts = saleToRegister.products.map(product => product.quantity).reduce((total, cantidad) => total += cantidad, 0);
+        newSale.products = productsWithDetails; // Incluye los detalles de cada producto
+        newSale.totalInvoiced = totalInvoiced;
+        newSale.totalProducts = totalProducts;
+        newSale.totalProfit = totalProfit; // Ganancia total de la venta
 
-        for (const product of saleToRegister.products) {
-            await this.productService.reduceInventories(product.id, product.quantity);
-        }
+        // Registro de la venta en la base de datos
+        const savedSale = await this.saleMongoRepository.save(newSale);
 
-        // REGISTRO DE FACTURA
-        //newSale.proofPayment
-
-        newSale = await this.saleMongoRepository.save(newSale);
-        return new ResponseDtoBuilder().created().whitData(newSale._id).whitMessage("Venta registrada con éxito").build();
+        return new ResponseDtoBuilder()
+            .created()
+            .whitData(savedSale._id)
+            .whitMessage("Venta registrada con éxito")
+            .build();
     }
 
     async findAll(): Promise<SaleDTO[]> {
@@ -101,7 +135,7 @@ export class SaleServiceImpl implements SaleService {
         if (sale.clientId) {
             saleDetail.client = await this.clientService.findByIdClient(sale.clientId);
         }
-        
+
         return saleDetail;
     }
 

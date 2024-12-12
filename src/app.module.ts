@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './plugins/user/user.module';
 import { LoginModule } from '@login/login.module';
-import { FinancialRegisterModule } from '@financial-register/financial-register.module';
+import { FinancialModule } from '@financial-register/financial-register.module';
 import { ProductsModule } from './plugins/products/products.module';
 import { SalesModule } from './plugins/sales/sales.module';
 import { FileSystemModule } from './plugins/file-system/file-system.module';
@@ -31,7 +31,7 @@ const providers = [
     ProductsModule,
     ClientsModule,
     SalesModule,
-    FinancialRegisterModule,
+    FinancialModule,
   ],
   controllers: [AppController],
   providers,

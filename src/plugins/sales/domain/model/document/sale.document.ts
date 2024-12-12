@@ -32,6 +32,15 @@ export class Sale {
     @Prop({ required: true, name: "total_products" })
     totalProducts: number;
 
+    @Prop({
+        required: false,
+        type: Number,
+        default: function () {
+            return this.products.reduce((sum, product) => sum + product.totalProfit, 0);
+        },
+    })
+    totalProfit: number; // Ganancia total de la venta
+
     @Prop({ required: true, name: "created_at", default: FzUtil.getCurrentDate() })
     createdAt: Date;
 

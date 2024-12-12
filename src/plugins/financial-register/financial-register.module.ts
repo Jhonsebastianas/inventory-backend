@@ -1,32 +1,33 @@
 import { Module } from "@nestjs/common";
 import { UserModule } from "@user/user.module";
-import { MovementsFinancial, MovementsFinancialSchema } from "./domain/model/document/movements-financial.document";
 import { MongooseModule } from "@nestjs/mongoose";
 import { MovementsFinancialRepositoryImpl } from "./application/movements-financial-repository.impl";
-import { MovementsFinancialServiceImpl } from "./application/movements-financial-service.impl";
-import { MovementsFinancialController } from "./infrastructure/movements-financial.controller";
 import { LoginModule } from "@login/login.module";
+import { FinancialController } from "./infrastructure/financial.controller";
+import { SalesModule } from "../sales/sales.module";
+import { FinancialServiceImpl } from "./application/financial-service.impl";
+import { Sale, SaleSchema } from "../sales/domain/model/document/sale.document";
 
 const documents = [
-    { name: MovementsFinancial.name, schema: MovementsFinancialSchema }
+    { name: Sale.name, schema: SaleSchema },
 ];
 
 const dependencies = [
+    SalesModule,
     UserModule,
     MongooseModule.forFeature(documents),
     LoginModule,
 ];
 
 const repositories = [
-    MovementsFinancialRepositoryImpl,
 ];
 
 const services = [
-    MovementsFinancialServiceImpl,
+    FinancialServiceImpl,
 ];
 
 const controllers = [
-    MovementsFinancialController,
+    FinancialController,
 ];
 
 @Module({
@@ -41,4 +42,4 @@ const controllers = [
         ...services,
     ],
 })
-export class FinancialRegisterModule { }
+export class FinancialModule { }
