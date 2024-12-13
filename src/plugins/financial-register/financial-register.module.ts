@@ -7,6 +7,7 @@ import { FinancialController } from "./infrastructure/financial.controller";
 import { SalesModule } from "../sales/sales.module";
 import { FinancialServiceImpl } from "./application/financial-service.impl";
 import { Sale, SaleSchema } from "../sales/domain/model/document/sale.document";
+import { BusinessModule } from "../business/business.module";
 
 const documents = [
     { name: Sale.name, schema: SaleSchema },
@@ -17,6 +18,7 @@ const dependencies = [
     UserModule,
     MongooseModule.forFeature(documents),
     LoginModule,
+    BusinessModule,
 ];
 
 const repositories = [
