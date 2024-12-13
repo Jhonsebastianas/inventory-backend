@@ -36,7 +36,7 @@ export class FinancialServiceImpl {
             case 'total':
                 startDate.setFullYear(2000, 1);
                 startDate.setMonth(0, 1);
-                endDate = new Date(startDate.getFullYear() + 1, 0, 1);
+                endDate.setDate(endDate.getDate() + 1);
                 break;
         }
 
