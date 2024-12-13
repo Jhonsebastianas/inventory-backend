@@ -9,7 +9,6 @@ import { FzUtil } from "@core/util/fz-util";
 import { UserSessionServiceImpl } from "@login/application/user-session-service.impl";
 import { Types } from "mongoose";
 import { CreateSaleDTO } from "../domain/model/dto/create-sale.dto";
-import { SaleProductMapper } from "../domain/repository/internal/mapper/sale-product.mapper";
 import { ProductServiceImpl } from "src/plugins/products/application/product-service.impl";
 import { BusinessServiceImpl } from "src/plugins/business/application/business-service.impl";
 import { SalesConsultationInDTO } from "../domain/model/dto/sales-consultation-in.dto";
@@ -20,6 +19,8 @@ import { SaleDetailDTO } from "../domain/model/dto/sale-detail/sale-detail.dto";
 import { UserServiceImpl } from "@user/application/user-service.impl";
 import { UserDTO } from "@user/domain/model/dto/user.dto";
 import { SaleDetailUser } from "../domain/model/dto/sale-detail/sale-detail-user";
+import { CreateSaleOutDTO } from "../domain/model/dto/create-sale-out.dto";
+import { InformationReductionInventoryDTO } from "src/plugins/products/domain/model/dto/information-reduction-inventoty.dto";
 
 
 @Injectable()
@@ -78,11 +79,17 @@ export class SaleServiceImpl implements SaleService {
         const totalProfit = productsWithDetails.reduce((total, product) => total + product.totalProfit, 0);
 
         // Reducción de inventarios
-        await Promise.all(
-            saleToRegister.products.map((product) =>
-                this.productService.reduceInventories(product.id, product.quantity)
-            )
+        const createSaleOut = new CreateSaleOutDTO();
+
+        const inventoryUpdates = await Promise.all(
+            saleToRegister.products.map(async (product) => {
+                const inventoryInformation: InformationReductionInventoryDTO = await this.productService.reduceInventories(product.id, product.quantity);
+                return inventoryInformation;
+            })
         );
+
+        // Agregar las informaciones reducidas al objeto `createSaleOut`
+        createSaleOut.informationReductionInventory.push(...inventoryUpdates);
 
         // Creación de la venta
         const newSale = new Sale();
@@ -99,9 +106,11 @@ export class SaleServiceImpl implements SaleService {
         // Registro de la venta en la base de datos
         const savedSale = await this.saleMongoRepository.save(newSale);
 
+        createSaleOut.idSale = savedSale._id.toString();
+
         return new ResponseDtoBuilder()
             .created()
-            .whitData(savedSale._id)
+            .whitData(createSaleOut)
             .whitMessage("Venta registrada con éxito")
             .build();
     }

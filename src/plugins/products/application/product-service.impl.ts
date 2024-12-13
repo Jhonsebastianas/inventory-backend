@@ -15,6 +15,7 @@ import { UserServiceImpl } from "@user/application/user-service.impl";
 import { UserDTO } from "@user/domain/model/dto/user.dto";
 import { EmailParametersBuilder } from "src/plugins/notification/domain/model/dto/email-parameters.dto";
 import { EmailServiceImpl } from "src/plugins/notification/application/email-service.impl";
+import { InformationReductionInventoryDTO } from "../domain/model/dto/information-reduction-inventoty.dto";
 
 
 @Injectable()
@@ -104,8 +105,12 @@ export class ProductServiceImpl implements ProductService {
             .flatMap(product => ProductMapper.mapToProductDTO(product));
     }
 
-    async reduceInventories(idProduct: string, quantity: number): Promise<void> {
+    async reduceInventories(idProduct: string, quantity: number): Promise<InformationReductionInventoryDTO> {
+        const informationReductionInventory = new InformationReductionInventoryDTO();
         const product: ProductDTO = await this.findById(idProduct);
+
+        informationReductionInventory.previousStock = product.stock;
+        informationReductionInventory.productName = product.name;
     
         let remainingQuantity = quantity; // Cantidad a reducir en stockDetails
         let updatedStock = 0; // Nuevo stock total después de la reducción
@@ -140,11 +145,13 @@ export class ProductServiceImpl implements ProductService {
     
         const newStock = product.stock - quantity;
         product.stock = (newStock > 0) ? newStock : 0;
+
+        informationReductionInventory.newStock = product.stock;
     
         // Verificamos si el inventario está por debajo del nivel de reorden
         if (product.stock <= product.quantityStockReplenished) {
+            informationReductionInventory.isExistenceBelowLimit = true;
             this.logger.log("Inventario próximo a reordenar");
-            console.log("Inventario próximo a reordenar");
             const business = await this.businessService.getBusinessWorkingOn();
             const userOwnerBusiness: UserDTO = await this.userService.findById(business.ownerId);
             const sendEmailDTO: SendEmailDTO = new SendEmailDTOBuilder()
@@ -163,6 +170,7 @@ export class ProductServiceImpl implements ProductService {
     
         // Finalmente, actualizamos el producto
         await this.updateProduct(idProduct, product);
+        return informationReductionInventory;
     }    
 
 }

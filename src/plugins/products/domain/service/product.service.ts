@@ -1,6 +1,7 @@
 import { ResponseDTO } from "@core/domain/response.dto";
 import { ProductRegisterDTO } from "../model/dto/product-register.dto";
 import { ProductDTO } from "../model/dto/product.dto";
+import { InformationReductionInventoryDTO } from "../model/dto/information-reduction-inventoty.dto";
 
 export interface ProductService {
 
@@ -65,6 +66,6 @@ export interface ProductService {
      * @param id product identity
      * @param quantity quantity to add or less
      */
-    reduceInventories(idProduct: string, quantity: number): Promise<void>;
+    reduceInventories(idProduct: string, quantity: number): Promise<InformationReductionInventoryDTO>;
     
 }
