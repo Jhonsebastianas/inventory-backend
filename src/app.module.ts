@@ -21,7 +21,7 @@ const providers = [
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
-    MongooseModule.forRoot('mongodb+srv://inventorybackend:oTy7FGJgr38fLQJJ@cluster0.i504v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0Finances'),
+    MongooseModule.forRoot(process.env.DATABASE_MONGO_URL_CONNECTION),
     CoreModule,
     FileSystemModule,
     NotificationModule,
