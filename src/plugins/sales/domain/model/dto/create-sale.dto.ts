@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsArray, IsOptional, ValidateNested, IsObject, ValidateIf } from 'class-validator';
+import { IsArray, IsOptional, ValidateNested, ValidateIf } from 'class-validator';
 import { Type } from 'class-transformer';
 import { SalePaymentMethodDTO } from './sale-payment-method.dto';
 import { FileDTO } from 'src/plugins/file-system/domain/model/dto/file.dto';
@@ -32,4 +32,9 @@ export class CreateSaleDTO {
   @ValidateNested()  // Valida las propiedades del objeto si existe
   @Type(() => RegisterClientInDTO)  // Especifica el tipo DTO para la transformación
   client: RegisterClientInDTO;
+
+  @IsOptional({ message: 'El campo fecha de venta es opcional' })
+  @ApiProperty({ description: 'Fecha en la cual fue realizada la venta', example: new Date() })
+  saleDate: Date;
+  
 }

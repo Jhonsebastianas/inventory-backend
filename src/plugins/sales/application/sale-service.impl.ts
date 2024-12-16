@@ -94,7 +94,7 @@ export class SaleServiceImpl implements SaleService {
         // Creación de la venta
         const newSale = new Sale();
         if (client) newSale.clientId = new Types.ObjectId(client.id);
-        newSale.createdAt = FzUtil.getCurrentDate();
+        newSale.createdAt = saleToRegister.saleDate ?? FzUtil.getCurrentDate();
         newSale.idUser = userId;
         newSale.businessId = new Types.ObjectId(currentBusiness.id);
         newSale.paymentMethods = saleToRegister.paymentMethods;
